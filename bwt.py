@@ -7,9 +7,9 @@ BWT module to encode and decode a sequence
 
 __author__ = 'Mohamed Ouertani'
 
-from pprint import pp
-import numpy as np
 from time import time
+import numpy as np
+
 
 def file_reading(input_file):
 
@@ -28,7 +28,7 @@ def file_reading(input_file):
 def matrix_sorter(matrix,length):
 
     """Sorts a matrix in lexicographical order"""
-    
+
     sorting_vector = np.full((1,length),"",dtype="U1000")
     for line_index in range(length):
         sorting_vector[0,line_index] = "".join(matrix[line_index,:])
@@ -77,7 +77,8 @@ def bwt_decoder(bwt_sequence):
 
 if __name__ == "__main__":
     start = time()
-    sequence_to_transform = file_reading("NC_009513.1.fasta")
+    sequence_to_transform = file_reading("NC_009513.1_copy.fasta")
     ENCODED_SEQUENCE = bwt_generator(sequence_to_transform)
     DECODED_SEQUENCE = bwt_decoder(ENCODED_SEQUENCE)
     print(time()-start)
+    
