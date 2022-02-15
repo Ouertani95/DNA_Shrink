@@ -7,7 +7,6 @@ Huffman module to ...
 
 __author__ = 'Mohamed Ouertani'
 
-from bz2 import compress
 from collections import Counter
 
 def car_frequency(sequence):
@@ -44,4 +43,20 @@ def sequence_decompression(compressed_sequence,binary_tree,freq_list=""):
     print(decoded_sequence)
     return decoded_sequence
 
-    pass
+def binary_to_char(compressed_sequence):
+    char_sequence = ""
+    len_compressed = len(compressed_sequence)
+    i=0
+    while i < len_compressed:
+        if i+8 <= len_compressed:
+            print(compressed_sequence[i:i+8])
+            print(chr(int(compressed_sequence[i:i+8],2)))
+            char_sequence += chr(int(compressed_sequence[i:i+8],2))
+            i = i+8
+        else:
+            print(compressed_sequence[i:len_compressed])
+            print(chr(int(compressed_sequence[i:len_compressed],2)))
+            char_sequence += chr(int(compressed_sequence[i:len_compressed],2))
+            break
+    print(char_sequence)
+    return char_sequence

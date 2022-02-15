@@ -21,3 +21,4 @@ if __name__ == "__main__":
     print(frequency_tree)
     compressed_sequence = huffman.sequence_compression (DECODED_SEQUENCE,frequency_tree ,frequency_count)
     decompressed_sequence = huffman.sequence_decompression(compressed_sequence,frequency_tree)
+    char_sequence = huffman.binary_to_char(compressed_sequence)

@@ -108,10 +108,8 @@ class BinaryTree():
                 #     self.head_node.set_one(second_sibling)
                 i += 1
 
-    
-
-
     def __str__(self):
         return str(self.head_node.print_node())
+
 
         
