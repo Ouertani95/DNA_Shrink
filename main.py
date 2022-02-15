@@ -19,5 +19,5 @@ if __name__ == "__main__":
     frequency_tree  = BinaryTree()
     frequency_tree.tree_builder(frequency_count)
     print(frequency_tree)
-    initial_binary_list = huffman.text_compression(binary_tree=frequency_tree ,freq_list=frequency_count)
-    frequency_tree.head_node.get_leaf("A")
+    compressed_sequence = huffman.sequence_compression (DECODED_SEQUENCE,frequency_tree ,frequency_count)
+    decompressed_sequence = huffman.sequence_decompression(compressed_sequence,frequency_tree)
