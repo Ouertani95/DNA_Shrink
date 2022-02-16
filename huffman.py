@@ -12,7 +12,7 @@ from collections import Counter
 def car_frequency(sequence):
     counts = Counter(sequence)
     counts_list = sorted(counts.items(), key=lambda x:x[1])
-    print(counts_list)
+    print("frequency list : ",counts_list)
     return counts_list
 
 def sequence_compression(sequence,binary_tree,freq_list):
@@ -20,10 +20,10 @@ def sequence_compression(sequence,binary_tree,freq_list):
     coded_sequence = ""
     for nuc in sequence:
         coded_sequence += coding_dict[nuc]
-    print(coding_dict)
-    print(decoding_dict)
-    print(sequence)
-    print(coded_sequence)
+    print("coding dictionnary : ",coding_dict)
+    print("decoding dictionnary : ",decoding_dict)
+    print("initial sequence : ",sequence)
+    print("compressed sequence : ",coded_sequence)
     return coded_sequence
 
 def sequence_decompression(compressed_sequence,binary_tree,freq_list=""):
@@ -40,23 +40,33 @@ def sequence_decompression(compressed_sequence,binary_tree,freq_list=""):
             len_sub = 1
         else:
             len_sub += 1
-    print(decoded_sequence)
+    print("decompressed sequence : ",decoded_sequence)
     return decoded_sequence
 
 def binary_to_char(compressed_sequence):
-    char_sequence = ""
+    # print(compressed_sequence)
+    # char_sequence = ""
+    char_list = []
     len_compressed = len(compressed_sequence)
     i=0
     while i < len_compressed:
         if i+8 <= len_compressed:
-            print(compressed_sequence[i:i+8])
-            print(chr(int(compressed_sequence[i:i+8],2)))
-            char_sequence += chr(int(compressed_sequence[i:i+8],2))
+            partial_sequence = compressed_sequence[i:i+8]
+            # print(type(partial_sequence))
+            # print(str(partial_sequence))
+            # print(chr(int(partial_sequence,2)))
+            char_list.append(chr(int(partial_sequence,2)))
+            # char_sequence += chr(int(partial_sequence,2))
             i = i+8
         else:
-            print(compressed_sequence[i:len_compressed])
-            print(chr(int(compressed_sequence[i:len_compressed],2)))
-            char_sequence += chr(int(compressed_sequence[i:len_compressed],2))
+            partial_sequence = compressed_sequence[i:len_compressed]
+            # print(partial_sequence)
+            # print(chr(int(partial_sequence,2)))
+            char_list.append(chr(int(partial_sequence,2)))
+            # char_sequence += chr(int(compressed_sequence[i:len_compressed],2))
             break
-    print(char_sequence)
-    return char_sequence
+    # print(char_sequence)
+    print("list of chars from compressed sequence : ",char_list)
+    print("last char number of bits :",len_compressed%8)
+    # return char_sequence
+    return char_list

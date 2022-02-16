@@ -22,7 +22,7 @@ def file_reading(input_file):
             if car not in caracters:
                 dollar_sequence = dollar_sequence.replace(car,"")
         dollar_sequence += "$"
-        print(dollar_sequence)
+        print("input sequence with dollar : \n",dollar_sequence)
     return dollar_sequence
 
 def matrix_sorter(matrix,length):
@@ -35,6 +35,7 @@ def matrix_sorter(matrix,length):
     sorting_vector.sort()
     for line_index in range(length):
         matrix[line_index,:] = list(sorting_vector[0,line_index])
+    print(matrix)
     return matrix
 
 def bwt_generator(raw_sequence):
@@ -47,11 +48,11 @@ def bwt_generator(raw_sequence):
     for line_index in range(sequence_len):
         bwt_matrix[line_index,:] = list(actual_sequence)
         actual_sequence = actual_sequence[-1] + actual_sequence[:-1]
-    print(bwt_matrix)
+    print("matrix with all offsets : \n",bwt_matrix)
     bwt_matrix = matrix_sorter(bwt_matrix,sequence_len)
-    print(bwt_matrix)
+    print("sorted matrix with all offsets : \n",bwt_matrix)
     bwt_sequence = "".join(bwt_matrix[:,sequence_len-1])
-    print(bwt_sequence)
+    print("bwt sequence : \n",bwt_sequence)
     return bwt_sequence
 
 
@@ -63,14 +64,16 @@ def bwt_decoder(bwt_sequence):
     decoding_matrix = np.full((bwt_len,bwt_len),"",dtype=str)
     for _ in range(bwt_len):
         decoding_matrix = np.roll(decoding_matrix,1)
+        print(decoding_matrix)
         decoding_matrix[:,0] = list(bwt_sequence)
+        print(decoding_matrix)
         decoding_matrix = matrix_sorter(decoding_matrix,bwt_len)
-    print(decoding_matrix)
+    print("bwt decoding matrix : \n",decoding_matrix)
     for dollar_index in range(bwt_len):
         if decoding_matrix[dollar_index,bwt_len-1] == "$":
             original_sequence = "".join(decoding_matrix[dollar_index,:bwt_len-1])
-            print(original_sequence)
-            print(len(original_sequence))
+            print("original sequence : \n",original_sequence)
+            print("length of original sequence : ",len(original_sequence))
             break
     return original_sequence
 

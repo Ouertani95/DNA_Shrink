@@ -18,7 +18,7 @@ if __name__ == "__main__":
     frequency_count = huffman.car_frequency(DECODED_SEQUENCE)
     frequency_tree  = BinaryTree()
     frequency_tree.tree_builder(frequency_count)
-    print(frequency_tree)
+    print("Frequency tree : \n",frequency_tree)
     compressed_sequence = huffman.sequence_compression (DECODED_SEQUENCE,frequency_tree ,frequency_count)
     decompressed_sequence = huffman.sequence_decompression(compressed_sequence,frequency_tree)
     char_sequence = huffman.binary_to_char(compressed_sequence)
