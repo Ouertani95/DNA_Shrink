@@ -75,22 +75,22 @@ class Huffman():
 
     def binary_to_char(self):
         """Transforms compressed binary sequence to 8 bit characters"""
-        char_list = []
+        char_sequence = ""
         len_compressed = len(self.huffman_sequence)
         i=0
         while i < len_compressed:
             if i+8 <= len_compressed:
                 partial_sequence = self.huffman_sequence[i:i+8]
-                char_list.append(chr(int(partial_sequence,2)))
+                char_sequence += chr(int(partial_sequence,2))
                 i = i+8
             else:
                 partial_sequence = self.huffman_sequence[i:len_compressed]
-                char_list.append(chr(int(partial_sequence,2)))
+                char_sequence += chr(int(partial_sequence,2))
                 break
-        print("list of chars from compressed sequence : ",char_list)
+        print("list of chars from compressed sequence : ",char_sequence)
         last_bits = len_compressed%8
         if last_bits == 0:
             print("last char number of bits : 8",)
         else:
             print("last char number of bits : ",last_bits)
-        return char_list
+        return char_sequence

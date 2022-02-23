@@ -9,6 +9,7 @@ __author__ = 'Mohamed Ouertani'
 
 from bwt import Bwt
 from huffman import Huffman
+import pickle
 
 if __name__ == "__main__":
 
@@ -21,4 +22,8 @@ if __name__ == "__main__":
     Huffman_transformer = Huffman(input_file="NC_009513.1_copy.fasta")
     binary_sequence = Huffman_transformer.sequence_to_binary()
     characters = Huffman_transformer.binary_to_char()
+    print(characters)
     original_sequence = Huffman_transformer.binary_to_sequence()
+    with open ("coded.txt","w") as coding_save:
+        coding_save.write(characters)
+    
