@@ -128,4 +128,3 @@ class BinaryTree():
 
     def __str__(self):
         return str(self.head_node.print_node())
-        

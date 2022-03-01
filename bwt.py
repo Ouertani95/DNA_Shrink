@@ -20,20 +20,6 @@ class Bwt():
         self.normal_sequence = None
         self.bwt_sequence = None
 
-    # @staticmethod
-    # def file_reading(input_file):
-
-    #     """Reads a sequence file and returns the sequence ready to be encoded"""
-
-    #     caracters = ["A","T","G","C","N"]
-    #     with open(input_file,"r") as file_input:
-    #         raw_sequence = file_input.read()
-    #     for car in raw_sequence:
-    #         if car not in caracters:
-    #             raw_sequence = raw_sequence.replace(car,"")
-    #     print("input sequence : \n",raw_sequence)
-    #     return raw_sequence
-
     @staticmethod
     def _matrix_sorter(matrix,length):
 
@@ -90,9 +76,10 @@ class Bwt():
             for dollar_index in range(bwt_len):
                 if decoding_matrix[dollar_index,bwt_len-1] == "$":
                     self.normal_sequence = "".join(decoding_matrix[dollar_index,:bwt_len-1])
-                    print("original sequence : \n",self.normal_sequence)
-                    print("length of original sequence : ",len(self.normal_sequence))
                     break
+            print("original sequence : \n",self.normal_sequence)
+            print("length of original sequence : ",len(self.normal_sequence))
+                    
         return self.normal_sequence
 
 
