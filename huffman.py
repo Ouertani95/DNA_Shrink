@@ -116,23 +116,3 @@ class Huffman():
         self.coding_dict, self.decoding_dict = self.binary_tree.get_tree_leaves()
         print("decompressed sequence : ",self.original_sequence)
         return self.original_sequence
-
-if __name__ == "__main__":
-    
-    # #decoding,coding:
-    decoding = {'00': 'C', '01': 'T', '10': 'G', '11': 'A', '´': 8}
-    huff = Huffman('Å´',decoding)
-    rebinary_seq = huff.char_to_binary()
-    original_seq = huff.binary_to_sequence()
-    # binary_seq = huff.sequence_to_binary()
-    # char_seq,last_bits,decode = huff.binary_to_char()
-    print()
-    print("--------------------------------------------------------")
-    print()
-    # #coding,decoding:
-    # huff = Huffman("ACTTGATC")
-    # binary_seq = huff.sequence_to_binary()
-    # char_seq,decoding = huff.binary_to_char()
-    # rebinary_seq = huff.char_to_binary(last_bits,huff.decoding_dict)
-    # original_seq = huff.binary_to_sequence()
-    pass

@@ -82,10 +82,3 @@ class Bwt():
                     
         return self.normal_sequence
 
-
-if __name__ == "__main__":
-    start = time()
-    test = Bwt("ACTTGATC")
-    test.bwt_generator()
-    test.bwt_decoder()
-    print(time()-start)

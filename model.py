@@ -9,6 +9,7 @@ __author__ = 'Mohamed Ouertani'
 
 from bwt import Bwt
 from huffman import Huffman
+import pickle
 
 class Model():
 
@@ -18,14 +19,18 @@ class Model():
         self.controller = controller
         self.bwt_handler = None
         self.huffman_handler = None
+        self.current_file = None
         self.input_sequence = None
         self.current_sequence = None
+        self.decoding_dict = None
         
         #TODO : add self.actual_sequence , self.decompression_dict
         #decompression dict could contain also the last char number of bits
 
-    def file_loader(self,input_file):
+    def file_loader(self,input_file,file_name):
         self.input_sequence = self.sequence_extractor(input_file)
+        self.current_file = file_name
+        print(self.current_file)
         self.current_sequence = self.input_sequence
         if self.is_uncompressed():
             self.bwt_handler = Bwt(self.input_sequence)
@@ -54,10 +59,11 @@ class Model():
 
     def compress_sequence(self):
         self.huffman_handler.sequence_to_binary()
-        huffman_sequence, _ = self.huffman_handler.binary_to_char()
+        huffman_sequence, decoding_dict = self.huffman_handler.binary_to_char()
         #deactivate all bwt buttons and compression button
         #only decompress and save will be available
         self.current_sequence = huffman_sequence
+        self.decoding_dict = decoding_dict
         return self.current_sequence
 
     def decompress_sequence(self):
@@ -84,21 +90,16 @@ class Model():
         self.current_sequence = original_sequence
         return self.current_sequence
 
-    def save_file(self,status):
-        if "Uncompressed" in status:
+    def save_file(self):
+        if self.is_uncompressed():
             if "$" in self.current_sequence:
-                with open ("test_bwt.txt","w") as bwt_output:
+                with open (f"{self.current_file}_bwt.txt","w") as bwt_output:
                     bwt_output.write(self.current_sequence)
             else:
-                with open ("test_original.txt","w") as original_output:
+                with open (f"{self.current_file}_original.txt","w") as original_output:
                     original_output.write(self.current_sequence)
         else:
-            pass
-
-if __name__ == "__main__":
-    test_model = Model("NC_009513.1_copy.fasta")
-    test_model.handle_uncompressed(0)
-    print("-------------------------------------------------------------------")
-    test_model.handle_uncompressed(1)
-    print("-------------------------------------------------------------------")
-    test_model.handle_uncompressed(2)
+            with open (f"{self.current_file}_huffman.txt","w") as huffman_output:
+                huffman_output.write(self.current_sequence)
+            with open(f"{self.current_file}_decoding_dict.pickle", "wb") as decoding_output:
+                pickle.dump(self.decoding_dict,decoding_output)

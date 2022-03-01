@@ -15,11 +15,8 @@ class Controller():
         self.model = Model(self)
         self.view = View(self)
         # self.button_functions = self.set_button_functions()
-            
-
-
+      
     def function_handler(self,function):
-        #["Open","Save","Compress","Decompress","Sequence to BWT","BWT to sequence"]
         if function == "Open":
             self.open()
         if function == "Save":
@@ -38,42 +35,40 @@ class Controller():
             compressed_seq = self.model.compress_sequence()
             self.view.change_status(compressed_seq,"Compressed")
         else:
-            self.view.show_warning("No sequence is loaded :\nPlease select a file first")
+            self.view.show_warning()
 
     def decompression(self):
         if self.model.huffman_handler:
             decompressed_seq = self.model.decompress_sequence()
             self.view.change_status(decompressed_seq,"Uncompressed")
         else:
-            self.view.show_warning("No sequence is loaded :\nPlease select a file first")
+            self.view.show_warning()
 
     def transform_bwt(self):
         if self.model.bwt_handler:
             bwt_sequence = self.model.sequence_to_bwt()
             self.view.change_status(bwt_sequence,"Uncompressed")
         else:
-            self.view.show_warning("No sequence is loaded :\nPlease select a file first")
+            self.view.show_warning()
 
     def transform_sequence(self):
         if self.model.bwt_handler:
             original_sequence = self.model.bwt_to_sequence()
             self.view.change_status(original_sequence,"Uncompressed")
         else:
-            self.view.show_warning("No sequence is loaded :\nPlease select a file first")
+            self.view.show_warning()
 
     def save(self):
-        current_status = self.view.get_status()
-        print(current_status)
-        self.model.save_file(current_status)
+        if self.model.current_sequence:
+            self.model.save_file()
+        else:
+            self.view.show_warning()
 
     def open(self):
-        file_path = self.view.open_file()
-        print(type(file_path))
-        print(f"the path is : {file_path}")
+        file_path,file_name = self.view.open_file()
         if file_path:
-            loaded_sequence = self.model.file_loader(file_path)
+            loaded_sequence = self.model.file_loader(file_path,file_name)
             self.view.change_status(loaded_sequence,"Uncompressed")
-        
 
     def launch_view(self):
         self.view.main()

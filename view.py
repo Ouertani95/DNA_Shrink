@@ -77,11 +77,10 @@ class View(themes.ThemedTk):
         print(self.filename)
         if (len(self.filename)) == 0 :
             messagebox.showwarning("File selection","No selected file")
-        else : 
-            global nameFile
-            nameFile = Path(self.filename).stem #extracts file name without extension from selected local file
-            messagebox.showwarning("File selection",f"Selected file : {nameFile}")
-        return self.filename
+        else :
+            name_file = Path(self.filename).stem #extracts file name without extension from selected local file
+            messagebox.showwarning("File selection",f"Selected file : {name_file}")
+        return self.filename , name_file
 
     def change_status(self,sequence,status):
         self.labels[0].pack_forget()
@@ -89,18 +88,15 @@ class View(themes.ThemedTk):
         self.labels[1].pack_forget()
         self.labels[1].config(text=f"Sequence status : {status}")
 
-    def show_warning(self,warning):
-        messagebox.showwarning("File selection",warning)
+    def show_warning(self):
+        messagebox.showwarning("File selection",
+                               "No sequence is loaded :\nPlease select a file first")
 
-    def get_status(self):
-        return self.labels[1].cget("text")
+    # def get_status(self):
+    #     return self.labels[1].cget("text")
 
     def main(self):
         """Launch the GUI"""
         self.create_interface()
         self.center_window()
         self.mainloop()
-
-if __name__ == "__main__":
-    window = View()
-    window.main()
