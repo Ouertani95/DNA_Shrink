@@ -46,7 +46,7 @@ class Model():
 
     def is_uncompressed(self):
         uncompressed = True
-        for char in self.input_sequence:
+        for char in self.current_sequence:
             if char not in ["A","T","G","C","N","$"]:
                 uncompressed = False
                 break
@@ -84,8 +84,16 @@ class Model():
         self.current_sequence = original_sequence
         return self.current_sequence
 
-    def save_file(self):
-        pass
+    def save_file(self,status):
+        if "Uncompressed" in status:
+            if "$" in self.current_sequence:
+                with open ("test_bwt.txt","w") as bwt_output:
+                    bwt_output.write(self.current_sequence)
+            else:
+                with open ("test_original.txt","w") as original_output:
+                    original_output.write(self.current_sequence)
+        else:
+            pass
 
 if __name__ == "__main__":
     test_model = Model("NC_009513.1_copy.fasta")
