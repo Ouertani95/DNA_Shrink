@@ -32,29 +32,41 @@ class Controller():
 
     def compression(self):
         if self.model.huffman_handler:
-            compressed_seq = self.model.compress_sequence()
-            self.view.change_status(compressed_seq,"Compressed")
+            if self.model.is_uncompressed():
+                compressed_seq = self.model.compress_sequence()
+                self.view.change_status(compressed_seq,"Compressed")
+            else:
+                self.view.show_warning("Sequence is already compressed")
         else:
             self.view.show_warning()
 
     def decompression(self):
         if self.model.huffman_handler:
-            decompressed_seq = self.model.decompress_sequence()
-            self.view.change_status(decompressed_seq,"Uncompressed")
+            if not self.model.is_uncompressed():
+                decompressed_seq = self.model.decompress_sequence()
+                self.view.change_status(decompressed_seq,"Uncompressed")
+            else:
+                self.view.show_warning("Sequence is already decompressed")
         else:
             self.view.show_warning()
 
     def transform_bwt(self):
         if self.model.bwt_handler:
-            bwt_sequence = self.model.sequence_to_bwt()
-            self.view.change_status(bwt_sequence,"Uncompressed")
+            if self.model.is_uncompressed():
+                bwt_sequence = self.model.sequence_to_bwt()
+                self.view.change_status(bwt_sequence,"Uncompressed")
+            else:
+                self.view.show_warning("Sequence is compressed\nTry decompressing first")
         else:
             self.view.show_warning()
 
     def transform_sequence(self):
         if self.model.bwt_handler:
-            original_sequence = self.model.bwt_to_sequence()
-            self.view.change_status(original_sequence,"Uncompressed")
+            if self.model.is_uncompressed():
+                original_sequence = self.model.bwt_to_sequence()
+                self.view.change_status(original_sequence,"Uncompressed")
+            else:
+                self.view.show_warning("Sequence is compressed\nTry decompressing first")
         else:
             self.view.show_warning()
 

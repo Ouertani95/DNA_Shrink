@@ -76,6 +76,7 @@ class View(themes.ThemedTk):
                                                    title="Select a file")
         print(self.filename)
         if (len(self.filename)) == 0 :
+            name_file = ""
             messagebox.showwarning("File selection","No selected file")
         else :
             name_file = Path(self.filename).stem #extracts file name without extension from selected local file
@@ -88,9 +89,8 @@ class View(themes.ThemedTk):
         self.labels[1].pack_forget()
         self.labels[1].config(text=f"Sequence status : {status}")
 
-    def show_warning(self):
-        messagebox.showwarning("File selection",
-                               "No sequence is loaded :\nPlease select a file first")
+    def show_warning(self,message="No sequence is loaded :\nPlease select a file first"):
+        messagebox.showwarning("File selection",message)
 
     # def get_status(self):
     #     return self.labels[1].cget("text")
