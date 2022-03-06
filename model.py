@@ -58,6 +58,7 @@ class Model():
                 break
         return uncompressed
 
+
     def compress_sequence(self):
         self.huffman_handler.sequence_to_binary()
         huffman_sequence, decoding_dict = self.huffman_handler.binary_to_char()
@@ -79,19 +80,19 @@ class Model():
         return self.current_sequence
 
     def sequence_to_bwt(self):
-        # bwt_sequence = self.bwt_handler.bwt_generator()
-        for step in self.bwt_handler.bwt_generator():
-            yield step
-        # self.huffman_handler = Huffman(bwt_sequence)
-        #deactivate sequence_to_bwt button
-        # self.current_sequence = bwt_sequence
-        return self.current_sequence
+        yield from self.bwt_handler.bwt_generator()
+        bwt_sequence = list(self.bwt_handler.bwt_generator())[-1]
+        self.current_sequence = bwt_sequence
+        self.huffman_handler = Huffman(bwt_sequence)
+        self.bwt_handler = Bwt(bwt_sequence)
 
     def bwt_to_sequence(self):
-        original_sequence = self.bwt_handler.bwt_decoder()
-        self.huffman_handler = Huffman(original_sequence)
+        yield from self.bwt_handler.bwt_decoder()
+        original_sequence = list(self.bwt_handler.bwt_decoder())[-1]
         self.current_sequence = original_sequence
-        return self.current_sequence
+        self.huffman_handler = Huffman(original_sequence)
+        self.bwt_handler = Bwt(original_sequence)
+        
 
     def save_file(self):
         if self.is_uncompressed():
@@ -109,3 +110,6 @@ class Model():
 
     def update_current_function(self,function):
         self.current_function = function
+
+    def get_current_sequence(self):
+        return self.current_sequence

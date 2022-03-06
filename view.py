@@ -39,7 +39,7 @@ class View(themes.ThemedTk):
         sequence_label.grid(column=0,row=0, padx=5,pady=5,columnspan=2,sticky="w")
         self.labels.append(sequence_label)
         status_label = ttk.Label(main_frame,
-                                 text="Sequence status : No sequence is loaded yet")
+                                 text="Sequence status : Not available")
         status_label.grid(column=0,row=1, padx=5,pady=5,columnspan=2,sticky="w")
         self.labels.append(status_label)
 
@@ -89,11 +89,11 @@ class View(themes.ThemedTk):
             messagebox.showwarning("File selection",f"Selected file : {name_file}")
         return self.filename , name_file
 
-    def change_status(self,sequence,status):
+    def change_status(self,sequence):#,status
         self.labels[0].pack_forget()
         self.labels[0].config(text=f"Current sequence : {sequence}")
-        self.labels[1].pack_forget()
-        self.labels[1].config(text=f"Sequence status : {status}")
+        # self.labels[1].pack_forget()
+        # self.labels[1].config(text=f"Sequence status : {status}")
 
     def show_warning(self,message="No sequence is loaded :\nPlease select a file first"):
         messagebox.showwarning("File selection",message)
