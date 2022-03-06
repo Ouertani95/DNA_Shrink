@@ -9,9 +9,10 @@ __author__ = 'Mohamed Ouertani'
 
 # Standard library imports
 from distutils.log import warn
-from tkinter import DISABLED, END, ttk, filedialog, messagebox
+from tkinter import DISABLED, END, RIGHT, Y, ttk, filedialog, messagebox
 from pathlib import Path
 import tkinter as tk
+from tkinter import font
 from tkinter.font import NORMAL
 from turtle import update
 # Third party imports
@@ -28,7 +29,7 @@ class View(themes.ThemedTk):
         # self.set_theme("black")
         self.buttons = ["Open","Save","Compress","Decompress","Sequence to BWT","BWT to sequence"]
         self.labels = []
-        # self.text = None
+        self.text_display = None
 
     def create_interface(self):
         main_frame = ttk.Frame(self)
@@ -53,16 +54,20 @@ class View(themes.ThemedTk):
                 row += 1 
             else:
                 column += 1
-
-        self.text_display = tk.Text(main_frame,height=22)#,state=DISABLED
-        self.text_display.grid(column=0,row=5,columnspan=2,
-                          rowspan=4,padx=5,pady=5,sticky="news")
-        # self.text = text_display
-        var1 = tk.IntVar()
+        #Create frame inside search result window
+        text_frame = ttk.Frame(main_frame)
+        text_frame.grid(column=0,row=5,columnspan=2,
+                        padx=5,pady=5,sticky="news")#
+        #Add scrolbar
+        y_scroll_bar = ttk.Scrollbar(text_frame)
+        y_scroll_bar.pack(side=RIGHT,fill=Y)
+        self.text_display = tk.Text(text_frame,height=22,yscrollcommand=y_scroll_bar.set,
+                                    width=80)
+        self.text_display.pack()
+        y_scroll_bar.config(command=self.text_display.yview)
         next_button = ttk.Button(main_frame,text="Next",
                                  command=lambda button = "Next" :self.controller.function_handler(button))
         next_button.grid(column=0,row=9,padx=10,pady=10,sticky="news")
-        var2 = tk.IntVar()
         final_button = ttk.Button(main_frame,text="End",
                                   command=lambda button = "End" :self.controller.function_handler(button))
         final_button.grid(column=1,row=9,padx=10,pady=10,sticky="news")

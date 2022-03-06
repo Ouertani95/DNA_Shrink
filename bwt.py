@@ -7,9 +7,6 @@ BWT module to encode and decode a sequence
 
 __author__ = 'Mohamed Ouertani'
 
-import sys
-from time import time
-import numpy as np
 
 class Bwt():
 

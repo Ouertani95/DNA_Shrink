@@ -39,6 +39,7 @@ class Controller():
         if self.model.huffman_handler:
             if self.model.is_uncompressed():
                 compressed_seq = self.model.compress_sequence()
+                self.view.update_text(f"Compressed sequence : {compressed_seq}")
                 self.view.change_status(compressed_seq)#,"Compressed"
             else:
                 self.view.show_warning("Sequence is already compressed")
@@ -49,6 +50,7 @@ class Controller():
         if self.model.huffman_handler:
             if not self.model.is_uncompressed():
                 decompressed_seq = self.model.decompress_sequence()
+                self.view.update_text(f"Decompressed sequence : {decompressed_seq}")
                 self.view.change_status(decompressed_seq)#,"Uncompressed"
             else:
                 self.view.show_warning("Sequence is already decompressed")
@@ -119,6 +121,7 @@ class Controller():
         if file_path:
             loaded_sequence = self.model.file_loader(file_path,file_name)
             self.view.change_status(loaded_sequence)
+            self.view.update_text("")
 
     def launch_view(self):
         self.view.main()
