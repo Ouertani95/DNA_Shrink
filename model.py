@@ -23,6 +23,7 @@ class Model():
         self.input_sequence = None
         self.current_sequence = None
         self.decoding_dict = None
+        self.current_function = None
         
         #TODO : add self.actual_sequence , self.decompression_dict
         #decompression dict could contain also the last char number of bits
@@ -78,10 +79,12 @@ class Model():
         return self.current_sequence
 
     def sequence_to_bwt(self):
-        bwt_sequence = self.bwt_handler.bwt_generator()
-        self.huffman_handler = Huffman(bwt_sequence)
+        # bwt_sequence = self.bwt_handler.bwt_generator()
+        for step in self.bwt_handler.bwt_generator():
+            yield step
+        # self.huffman_handler = Huffman(bwt_sequence)
         #deactivate sequence_to_bwt button
-        self.current_sequence = bwt_sequence
+        # self.current_sequence = bwt_sequence
         return self.current_sequence
 
     def bwt_to_sequence(self):
@@ -103,3 +106,6 @@ class Model():
                 huffman_output.write(self.current_sequence)
             with open(f"{self.current_file}_decoding_dict.pickle", "wb") as decoding_output:
                 pickle.dump(self.decoding_dict,decoding_output)
+
+    def update_current_function(self,function):
+        self.current_function = function

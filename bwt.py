@@ -46,12 +46,15 @@ class Bwt():
             for line_index in range(sequence_len):
                 bwt_matrix[line_index,:] = list(actual_sequence)
                 print(bwt_matrix)
+                yield bwt_matrix
                 actual_sequence = actual_sequence[-1] + actual_sequence[:-1]
             print("matrix with all offsets : \n",bwt_matrix)
             bwt_matrix = self._matrix_sorter(bwt_matrix,sequence_len)
+            yield bwt_matrix
             print("sorted matrix with all offsets : \n",bwt_matrix)
             self.bwt_sequence = "".join(bwt_matrix[:,sequence_len-1])
             print("bwt sequence : \n",self.bwt_sequence)
+            yield self.bwt_sequence
         return self.bwt_sequence
 
 

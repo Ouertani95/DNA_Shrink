@@ -5,9 +5,10 @@
 Controller module to coordinate between view and model
 """
 
+__author__ = 'Mohamed Ouertani'
+
 from model import Model
 from view import View
-__author__ = 'Mohamed Ouertani'
 
 class Controller():
 
@@ -29,6 +30,10 @@ class Controller():
             self.transform_bwt()
         if function == "BWT to sequence":
             self.transform_sequence()
+        if function == "Next":
+            self.step_by_step()
+        if function == "End":
+            self.jump_to_end()
 
     def compression(self):
         if self.model.huffman_handler:
@@ -53,12 +58,16 @@ class Controller():
     def transform_bwt(self):
         if self.model.bwt_handler:
             if self.model.is_uncompressed():
-                bwt_sequence = self.model.sequence_to_bwt()
-                self.view.change_status(bwt_sequence,"Uncompressed")
+                bwt_generator = self.model.sequence_to_bwt()
+                self.model.update_current_function(bwt_generator)
+                self.view.update_text("""You chose the transform bwt function, 
+                                        Press Next or End to continue""")
+                # self.view.change_status(bwt_sequence,"Uncompressed")
             else:
                 self.view.show_warning("Sequence is compressed\nTry decompressing first")
         else:
             self.view.show_warning()
+        
 
     def transform_sequence(self):
         if self.model.bwt_handler:
@@ -69,6 +78,26 @@ class Controller():
                 self.view.show_warning("Sequence is compressed\nTry decompressing first")
         else:
             self.view.show_warning()
+
+    def step_by_step(self):
+        if self.model.current_function:
+            try:
+                next_value = next(self.model.current_function)
+                self.view.update_text(f" Next step :\n {next_value} ")
+            except StopIteration:
+                self.view.update_text("The protocole is finished, please refer to the main menu.")
+        else:
+            self.view.show_warning("No function is chosen yet")
+
+    def jump_to_end(self):
+        if self.model.current_function:
+            try:
+                last_value = list(self.model.current_function)[-1]
+                self.view.update_text(f" Last step :\n {last_value} ")
+            except IndexError:
+                self.view.update_text("The protocole is finished, please refer to the main menu.")
+        else:
+            self.view.show_warning("No function is chosen yet")
 
     def save(self):
         if self.model.current_sequence:

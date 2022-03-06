@@ -9,9 +9,11 @@ __author__ = 'Mohamed Ouertani'
 
 # Standard library imports
 from distutils.log import warn
-from tkinter import DISABLED, ttk, filedialog, messagebox
+from tkinter import DISABLED, END, ttk, filedialog, messagebox
 from pathlib import Path
-import tkinter
+import tkinter as tk
+from tkinter.font import NORMAL
+from turtle import update
 # Third party imports
 import ttkthemes as themes
 
@@ -26,6 +28,7 @@ class View(themes.ThemedTk):
         # self.set_theme("black")
         self.buttons = ["Open","Save","Compress","Decompress","Sequence to BWT","BWT to sequence"]
         self.labels = []
+        # self.text = None
 
     def create_interface(self):
         main_frame = ttk.Frame(self)
@@ -51,14 +54,17 @@ class View(themes.ThemedTk):
             else:
                 column += 1
 
-        text_display = tkinter.Text(main_frame,state=DISABLED,height=22)
-        text_display.grid(column=0,row=5,columnspan=2,
+        self.text_display = tk.Text(main_frame,height=22)#,state=DISABLED
+        self.text_display.grid(column=0,row=5,columnspan=2,
                           rowspan=4,padx=5,pady=5,sticky="news")
-        var1 = tkinter.IntVar()
-        next_button = ttk.Button(main_frame,text="Next",command = lambda : var1.set(1))
+        # self.text = text_display
+        var1 = tk.IntVar()
+        next_button = ttk.Button(main_frame,text="Next",
+                                 command=lambda button = "Next" :self.controller.function_handler(button))
         next_button.grid(column=0,row=9,padx=10,pady=10,sticky="news")
-        var2 = tkinter.IntVar()
-        final_button = ttk.Button(main_frame,text="End",command = lambda : var2.set(1))
+        var2 = tk.IntVar()
+        final_button = ttk.Button(main_frame,text="End",
+                                  command=lambda button = "End" :self.controller.function_handler(button))
         final_button.grid(column=1,row=9,padx=10,pady=10,sticky="news")
         
     def center_window(self):
@@ -92,8 +98,12 @@ class View(themes.ThemedTk):
     def show_warning(self,message="No sequence is loaded :\nPlease select a file first"):
         messagebox.showwarning("File selection",message)
 
-    # def get_status(self):
-    #     return self.labels[1].cget("text")
+    def update_text(self,text):
+        
+        self.text_display.configure(state=NORMAL)
+        self.text_display.delete(1.0, "end")   #Clear the text window so we can write.
+        self.text_display.insert(END,text)
+        self.text_display.configure(state=DISABLED)
 
     def main(self):
         """Launch the GUI"""
