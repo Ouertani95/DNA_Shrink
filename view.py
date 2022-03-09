@@ -10,6 +10,9 @@ __author__ = 'Mohamed Ouertani'
 # Standard library imports
 from distutils.log import warn
 from tkinter import DISABLED, END, RIGHT, Y, ttk, filedialog, messagebox
+from tkinter.dnd import dnd_start
+import tkinterdnd2 as tkdnd
+from tkdnd import DND_FILES
 from pathlib import Path
 import tkinter as tk
 from tkinter import font
@@ -19,7 +22,7 @@ from turtle import update
 import ttkthemes as themes
 
 
-class View(themes.ThemedTk):
+class View(tkdnd.TkinterDnD.Tk):
     
     def __init__(self,controller) -> None:
         self.controller = controller
@@ -54,6 +57,8 @@ class View(themes.ThemedTk):
                 row += 1 
             else:
                 column += 1
+
+        
         #Create frame inside search result window
         text_frame = ttk.Frame(main_frame)
         text_frame.grid(column=0,row=5,columnspan=2,
@@ -62,15 +67,32 @@ class View(themes.ThemedTk):
         y_scroll_bar = ttk.Scrollbar(text_frame)
         y_scroll_bar.pack(side=RIGHT,fill=Y)
         self.text_display = tk.Text(text_frame,height=22,yscrollcommand=y_scroll_bar.set,
-                                    width=80)
+                                    width=80,state=DISABLED)
         self.text_display.pack()
         y_scroll_bar.config(command=self.text_display.yview)
+        self.text_display.drop_target_register(DND_FILES)
+        self.text_display.dnd_bind('<<Drop>>', self.show_text)
+
+        self.text_display.configure(state=NORMAL)
+        self.text_display.insert("end","Drag and drop a .txt file")
+        self.text_display.configure(state=DISABLED)
+
         next_button = ttk.Button(main_frame,text="Next",
                                  command=lambda button = "Next" :self.controller.function_handler(button))
         next_button.grid(column=0,row=9,padx=10,pady=10,sticky="news")
         final_button = ttk.Button(main_frame,text="End",
                                   command=lambda button = "End" :self.controller.function_handler(button))
         final_button.grid(column=1,row=9,padx=10,pady=10,sticky="news")
+
+    def show_text(self,event):
+        self.text_display.configure(state=NORMAL)
+        self.text_display.delete("1.0","end")
+        if event.data.endswith(".txt"):
+            with open(event.data, "r") as file:
+                for line in file:
+                    line=line.strip()
+                    self.text_display.insert("end",f"{line}\n")
+        self.text_display.configure(state=DISABLED)
         
     def center_window(self):
         """Center the GUI window inside the screen"""
@@ -104,7 +126,6 @@ class View(themes.ThemedTk):
         messagebox.showwarning("File selection",message)
 
     def update_text(self,text):
-        
         self.text_display.configure(state=NORMAL)
         self.text_display.delete(1.0, "end")   #Clear the text window so we can write.
         self.text_display.insert(END,text)
