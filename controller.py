@@ -7,6 +7,7 @@ Controller module to coordinate between view and model
 
 __author__ = 'Mohamed Ouertani'
 
+from binaryornot.check import is_binary
 from model import Model
 from view import View
 
@@ -18,73 +19,65 @@ class Controller():
         # self.button_functions = self.set_button_functions()
       
     def function_handler(self,function):
-        if function == "Open":
-            self.open()
-        if function == "Save":
-            self.save()
-        if function == "Compress":
-            self.compression()
-        if function == "Decompress":
-            self.decompression()
-        if function == "Sequence to BWT":
-            self.transform_bwt()
-        if function == "BWT to sequence":
-            self.transform_sequence()
-        if function == "Next":
-            self.step_by_step()
-        if function == "End":
-            self.jump_to_end()
+        if function != "Open" and not self.model.huffman_handler:
+            self.view.show_warning()
+        else:
+            if function == "Open":
+                self.open()
+            if function == "Save":
+                self.save()
+            if function == "Compress":
+                self.compression()
+            if function == "Decompress":
+                self.decompression()
+            if function == "Sequence to BWT":
+                self.transform_bwt()
+            if function == "BWT to sequence":
+                self.transform_sequence()
+            if function == "Next":
+                self.step_by_step()
+            if function == "End":
+                self.jump_to_end()
 
     def compression(self):
-        if self.model.huffman_handler:
-            if self.model.is_uncompressed():
-                compressed_seq = self.model.compress_sequence()
-                self.view.update_text(f"Compressed sequence : {compressed_seq}")
-                self.view.change_status(compressed_seq)#,"Compressed"
-            else:
-                self.view.show_warning("Sequence is already compressed")
+        if self.model.is_uncompressed():
+            compressed_seq = self.model.compress_sequence()
+            self.view.update_text(f"Compressed sequence : {compressed_seq}")
+            self.view.change_status(compressed_seq)#,"Compressed"
         else:
-            self.view.show_warning()
+            self.view.show_warning("Sequence is already compressed")
+        
 
     def decompression(self):
-        if self.model.huffman_handler:
-            if not self.model.is_uncompressed():
-                decompressed_seq = self.model.decompress_sequence()
-                self.view.update_text(f"Decompressed sequence : {decompressed_seq}")
-                self.view.change_status(decompressed_seq)#,"Uncompressed"
-            else:
-                self.view.show_warning("Sequence is already decompressed")
+        if not self.model.is_uncompressed():
+            decompressed_seq = self.model.decompress_sequence()
+            self.view.update_text(f"Decompressed sequence : {decompressed_seq}")
+            self.view.change_status(decompressed_seq)#,"Uncompressed"
         else:
-            self.view.show_warning()
+            self.view.show_warning("Sequence is already decompressed")
 
     def transform_bwt(self):
-        if self.model.bwt_handler:
-            if self.model.is_uncompressed():
-                if not self.model.bwt_handler.is_bwt():
-                    bwt_generator = self.model.sequence_to_bwt()
-                    self.model.update_current_function(bwt_generator)
-                    self.view.update_text("""Transform bwt function, Press Next or End to continue""")
-                else:
-                    self.view.show_warning("Sequence is already BWT")
+        if self.model.is_uncompressed():
+            if not self.model.bwt_handler.is_bwt():
+                bwt_generator = self.model.sequence_to_bwt()
+                self.model.update_current_function(bwt_generator)
+                self.view.update_text("""Transform bwt function, Press Next or End to continue""")
             else:
-                self.view.show_warning("Sequence is compressed\nTry decompressing first")
+                self.view.show_warning("Sequence is already BWT")
         else:
-            self.view.show_warning()
+            self.view.show_warning("Sequence is compressed\nTry decompressing first")
         
 
     def transform_sequence(self):
-        if self.model.bwt_handler:
-            if self.model.is_uncompressed():
-                if self.model.bwt_handler.is_bwt():
-                    bwt_decoder = self.model.bwt_to_sequence()
-                    self.model.update_current_function(bwt_decoder)
-                    self.view.update_text("""Transform sequence function, Press Next or End to continue""")
-                else:
-                    self.view.show_warning("Sequence is already normal")
+        if self.model.is_uncompressed():
+            if self.model.bwt_handler.is_bwt():
+                bwt_decoder = self.model.bwt_to_sequence()
+                self.model.update_current_function(bwt_decoder)
+                self.view.update_text("""Transform sequence function, Press Next or End to continue""")
             else:
-                self.view.show_warning("Sequence is compressed\nTry decompressing first")
+                self.view.show_warning("Sequence is already normal")
         else:
-            self.view.show_warning()
+            self.view.show_warning("Sequence is compressed\nTry decompressing first")
 
     def step_by_step(self):
         if self.model.current_function:
@@ -112,16 +105,29 @@ class Controller():
 
     def save(self):
         if self.model.current_sequence:
-            self.model.save_file()
+            saved_files = self.model.save_file()
+            self.view.show_warning(f"The Following files were save :\n{saved_files}")
         else:
             self.view.show_warning()
 
     def open(self):
         file_path,file_name = self.view.open_file()
         if file_path:
-            loaded_sequence = self.model.file_loader(file_path,file_name)
-            self.view.change_status(loaded_sequence)
-            self.view.update_text("")
+            if self.is_plain_text(file_path):
+                loaded_sequence = self.model.file_loader(file_path,file_name)
+                self.view.change_status(loaded_sequence)
+                self.view.update_text("")
+            else:
+                self.view.show_warning("wrong file format")
+                #"Sequence longer than 50 :\nTry another file"
+
+    def is_plain_text(self,file_path):
+        with open (file_path,"r") as file_check:
+            content = file_check.read()
+        if len(content)> 100 or is_binary(file_path):
+            return False
+        return True
+
 
     def launch_view(self):
         self.view.main()
