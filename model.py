@@ -7,9 +7,11 @@ Model module to manipulate the data
 
 __author__ = 'Mohamed Ouertani'
 
+import os
+import pickle
 from bwt import Bwt
 from huffman import Huffman
-import pickle
+
 
 class Model():
 
@@ -24,9 +26,7 @@ class Model():
         self.current_sequence = None
         self.decoding_dict = None
         self.current_function = None
-        
-        #TODO : add self.actual_sequence , self.decompression_dict
-        #decompression dict could contain also the last char number of bits
+
 
     def file_loader(self,input_file,file_name):
         self.input_sequence = self.sequence_extractor(input_file)
@@ -62,8 +62,6 @@ class Model():
     def compress_sequence(self):
         self.huffman_handler.sequence_to_binary()
         huffman_sequence, decoding_dict = self.huffman_handler.binary_to_char()
-        #deactivate all bwt buttons and compression button
-        #only decompress and save will be available
         self.current_sequence = huffman_sequence
         self.decoding_dict = decoding_dict
         return self.current_sequence
@@ -72,10 +70,6 @@ class Model():
         self.huffman_handler.char_to_binary()
         decompressed_sequence = self.huffman_handler.binary_to_sequence()
         self.bwt_handler = Bwt(decompressed_sequence)
-        #deactivate decompress button
-        #activate compress and save
-        #if sequence is bwt activate bwt_to_sequence button
-        #if sequence is normal activate sequence_to_bwt
         self.current_sequence = decompressed_sequence
         return self.current_sequence
 
@@ -95,18 +89,33 @@ class Model():
         
 
     def save_file(self):
+        self.check_directories()
         if self.is_uncompressed():
             if "$" in self.current_sequence:
-                with open (f"{self.current_file}_bwt.txt","w") as bwt_output:
+                file_name = f"{self.current_file}_bwt.txt"
+                with open (f"./bwt_sequences/{file_name}","w") as bwt_output:
                     bwt_output.write(self.current_sequence)
             else:
-                with open (f"{self.current_file}_original.txt","w") as original_output:
+                file_name = f"{self.current_file}_original.txt"
+                with open (f"./original_sequences/{file_name}","w") as original_output:
                     original_output.write(self.current_sequence)
+            return file_name
         else:
-            with open (f"{self.current_file}_huffman.txt","w") as huffman_output:
+            file_name1 = f"{self.current_file}_huffman.txt"
+            with open (f"./compressed_sequences/{file_name1}","w") as huffman_output:
                 huffman_output.write(self.current_sequence)
-            with open(f"{self.current_file}_decoding_dict.pickle", "wb") as decoding_output:
+            file_name2 = f"{self.current_file}_decoding_dict.pickle"
+            with open(f"./compressed_sequences/{file_name2}", "wb") as decoding_output:
                 pickle.dump(self.decoding_dict,decoding_output)
+            return "\n".join([file_name1,file_name2])
+
+    @staticmethod
+    def check_directories():
+        directories = ["./bwt_sequences","./compressed_sequences",
+                       "./original_sequences"]
+        for path in directories:
+            if not os.path.exists(path):
+                os.mkdir(path)
 
     def update_current_function(self,function):
         self.current_function = function
