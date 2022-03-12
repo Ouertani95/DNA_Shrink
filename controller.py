@@ -111,12 +111,12 @@ class Controller():
     def open(self):
         file_path,file_name = self.view.open_file()
         if file_path:
-            if self.is_plain_text(file_path):
-                loaded_sequence = self.model.file_loader(file_path,file_name)
-                self.view.update_text(f"Current sequence : {loaded_sequence}")
-            else:
-                self.view.show_warning("wrong file format")
-                #"Sequence longer than 50 :\nTry another file"
+            # if self.is_plain_text(file_path):
+            loaded_sequence = self.model.file_loader(file_path,file_name)
+            self.view.update_text(f"Current sequence : {loaded_sequence}")
+            # else:
+            #     self.view.show_warning("wrong file format")
+            #     #"Sequence longer than 50 :\nTry another file"
 
     def is_plain_text(self,file_path):
         with open (file_path,"r") as file_check:
