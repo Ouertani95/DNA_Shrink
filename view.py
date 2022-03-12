@@ -23,61 +23,63 @@ class View(tkinter.Tk):
         self.controller = controller
         super().__init__()
         self.title("Huffman/BWT")
-        self.geometry("700x650")
-        # self.set_theme("black")
-        self.buttons = ["Open","Save","Compress","Decompress","Sequence to BWT","BWT to sequence"]
+        self.geometry("700x600")
+        self.buttons = ["Open","Save","Compress","Decompress",
+                        "Sequence to BWT","BWT to sequence",
+                        "Next","End"]
         self.labels = []
         self.text_display = None
 
     def create_interface(self):
+        #Create main frame
         main_frame = ttk.Frame(self)
         main_frame.pack()
-        
+
         # Set the initial theme
         self.tk.call("source", "./Sun-Valley-ttk-theme-master/sun-valley.tcl")
         self.tk.call("set_theme", "dark")
-        
-        sequence_label = ttk.Label(main_frame,
-                                   text="Current sequence : No sequence is loaded yet")
-        sequence_label.grid(column=0,row=0, padx=5,pady=5,columnspan=2,sticky="w")
-        self.labels.append(sequence_label)
-        status_label = ttk.Label(main_frame,
-                                 text="Sequence status : Not available")
-        status_label.grid(column=0,row=1, padx=5,pady=5,columnspan=2,sticky="w")
-        self.labels.append(status_label)
 
-        column,row = 0,2
-        for button_text in self.buttons:
-            button = ttk.Button(main_frame,text=button_text,
+        #Create an instance of Style Object
+        style = ttk.Style()
+
+        #Configure the properties of the Buttons
+        style.configure('style.TButton', font=("Palatino Linotype", 12, "bold"), foreground="#3a86ff")
+        
+        #Create all the buttons
+        column,row = 0,0
+        for button_number,button_text in enumerate(self.buttons):
+            button = ttk.Button(main_frame,text=button_text,style='style.TButton',
                                 command=lambda button = button_text :self.controller.function_handler(button))
             button.grid(column=column,row=row, padx=10,pady=10,sticky="news")
+            if button_number == 5:
+                row +=1
             if column > 0 and column %2 == 1:
                 column = 0
                 row += 1 
             else:
                 column += 1
 
-        
         #Create frame inside search result window
         text_frame = ttk.Frame(main_frame)
-        text_frame.grid(column=0,row=5,columnspan=2,
-                        padx=5,pady=5,sticky="news")#
-        #Add scrolbar
+        text_frame.grid(column=0,row=3,columnspan=2,
+                        padx=5,pady=5,sticky="news")
+
+        #Add scrollbar
         y_scroll_bar = ttk.Scrollbar(text_frame)
         y_scroll_bar.pack(side=RIGHT,fill=Y)
+
+        #Create text widget
         self.text_display = tk.Text(text_frame,height=22,yscrollcommand=y_scroll_bar.set,
                                     width=80,state=DISABLED)
         self.text_display.pack()
+
+        #Configure scrollbar
         y_scroll_bar.config(command=self.text_display.yview)
 
-        next_button = ttk.Button(main_frame,text="Next",
-                                 command=lambda button = "Next" :self.controller.function_handler(button))
-        next_button.grid(column=0,row=9,padx=10,pady=10,sticky="news")
-        final_button = ttk.Button(main_frame,text="End",
-                                  command=lambda button = "End" :self.controller.function_handler(button))
-        final_button.grid(column=1,row=9,padx=10,pady=10,sticky="news")
+        #Set initial text
+        self.update_text("No sequence is loaded, please choose a file to start.")
 
-        
+
     def center_window(self):
         """Center the GUI window inside the screen"""
         self.update() #update object states (used to return new value of h / w)
@@ -89,8 +91,11 @@ class View(tkinter.Tk):
         self.geometry(f"{width}x{height}+{x_offset}+{y_offset}")
 
     def open_file(self):
-        self.filename = filedialog.askopenfilename(initialdir="~/Desktop/projetProgrammation2021",
-                                                   title="Select a file")
+        self.filename = filedialog.askopenfilename(initialdir="./",
+                                                   title="Select a file",
+                                                   filetypes=(("text files","*.txt"),
+                                                              ("fasta file",".fasta"),
+                                                              ("all files","*.*")))
         print(self.filename)
         if (len(self.filename)) == 0 :
             name_file = ""
@@ -100,20 +105,17 @@ class View(tkinter.Tk):
             messagebox.showwarning("File selection",f"Selected file : {name_file}")
         return self.filename , name_file
 
-    def change_status(self,sequence):#,status
-        self.labels[0].pack_forget()
-        self.labels[0].config(text=f"Current sequence : {sequence}")
-        # self.labels[1].pack_forget()
-        # self.labels[1].config(text=f"Sequence status : {status}")
 
     def show_warning(self,message="No sequence is loaded :\nPlease select a file first"):
         messagebox.showwarning("File selection",message)
+
 
     def update_text(self,text):
         self.text_display.configure(state=NORMAL)
         self.text_display.delete(1.0, "end")   #Clear the text window so we can write.
         self.text_display.insert(END,text)
         self.text_display.configure(state=DISABLED)
+
 
     def main(self):
         """Launch the GUI"""
