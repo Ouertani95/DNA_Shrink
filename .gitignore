@@ -1,0 +1,7 @@
+#repositories
+__pycache__/
+./dnashrink/__pycache__/
+testing_files/
+
+#pdf files
+*.pdf
