@@ -8,21 +8,16 @@ View module to display the data
 __author__ = 'Mohamed Ouertani'
 
 # Standard library imports
-from distutils.log import warn
 from tkinter import DISABLED, END, RIGHT, Y, ttk, filedialog, messagebox
-from tkinter.dnd import dnd_start
-import tkinterdnd2 as tkdnd
-from tkdnd import DND_FILES
+import tkinter
 from pathlib import Path
 import tkinter as tk
-from tkinter import font
 from tkinter.font import NORMAL
-from turtle import update
 # Third party imports
 import ttkthemes as themes
 
 
-class View(tkdnd.TkinterDnD.Tk):
+class View(tkinter.Tk):
     
     def __init__(self,controller) -> None:
         self.controller = controller
@@ -37,6 +32,10 @@ class View(tkdnd.TkinterDnD.Tk):
     def create_interface(self):
         main_frame = ttk.Frame(self)
         main_frame.pack()
+        
+        # Set the initial theme
+        self.tk.call("source", "./Sun-Valley-ttk-theme-master/sun-valley.tcl")
+        self.tk.call("set_theme", "dark")
         
         sequence_label = ttk.Label(main_frame,
                                    text="Current sequence : No sequence is loaded yet")
@@ -70,12 +69,6 @@ class View(tkdnd.TkinterDnD.Tk):
                                     width=80,state=DISABLED)
         self.text_display.pack()
         y_scroll_bar.config(command=self.text_display.yview)
-        self.text_display.drop_target_register(DND_FILES)
-        self.text_display.dnd_bind('<<Drop>>', self.show_text)
-
-        self.text_display.configure(state=NORMAL)
-        self.text_display.insert("end","Drag and drop a .txt file")
-        self.text_display.configure(state=DISABLED)
 
         next_button = ttk.Button(main_frame,text="Next",
                                  command=lambda button = "Next" :self.controller.function_handler(button))
@@ -84,15 +77,6 @@ class View(tkdnd.TkinterDnD.Tk):
                                   command=lambda button = "End" :self.controller.function_handler(button))
         final_button.grid(column=1,row=9,padx=10,pady=10,sticky="news")
 
-    def show_text(self,event):
-        self.text_display.configure(state=NORMAL)
-        self.text_display.delete("1.0","end")
-        if event.data.endswith(".txt"):
-            with open(event.data, "r") as file:
-                for line in file:
-                    line=line.strip()
-                    self.text_display.insert("end",f"{line}\n")
-        self.text_display.configure(state=DISABLED)
         
     def center_window(self):
         """Center the GUI window inside the screen"""
