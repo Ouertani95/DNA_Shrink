@@ -91,7 +91,7 @@ class Huffman():
                 binary_char = str(format(ord(char),'b')).zfill(8)
             else:
                 decoding_keys = list(self.decoding_dict.values())
-                binary_char = str(format(ord(char),'b')).zfill(decoding_keys[-1])
+                binary_char = str(format(ord(char),'b')).zfill(int(decoding_keys[-1]))
             self.binary_sequence += binary_char
         print("char to binary seq: ",self.binary_sequence)
         return self.binary_sequence

@@ -59,7 +59,7 @@ class Bwt():
                     break
             yield self.normal_sequence
 
-    def is_bwt(self):
+    def input_is_bwt(self):
         return "$" in self.input_sequence
 
     
