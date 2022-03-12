@@ -41,8 +41,9 @@ class Controller():
 
     def compression(self):
         if self.model.is_uncompressed():
-            compressed_seq = self.model.compress_sequence()
-            self.view.update_text(f"Compressed sequence : {compressed_seq}")
+            compressed_seq,binary_sequence = self.model.compress_sequence()
+            self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
+                                 +f"Compressed sequence : {compressed_seq}")
             self.view.change_status(compressed_seq)#,"Compressed"
         else:
             self.view.show_warning("Sequence is already compressed")
@@ -50,8 +51,9 @@ class Controller():
 
     def decompression(self):
         if not self.model.is_uncompressed():
-            decompressed_seq = self.model.decompress_sequence()
-            self.view.update_text(f"Decompressed sequence : {decompressed_seq}")
+            decompressed_seq,binary_sequence = self.model.decompress_sequence()
+            self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
+                                 +f"Decompressed sequence : {decompressed_seq}")
             self.view.change_status(decompressed_seq)#,"Uncompressed"
         else:
             self.view.show_warning("Sequence is already decompressed")
@@ -123,7 +125,10 @@ class Controller():
 
     def is_plain_text(self,file_path):
         with open (file_path,"r") as file_check:
-            content = file_check.read()
+            try:
+                content = file_check.read()
+            except UnicodeDecodeError:
+                return False
         if len(content)> 100 or is_binary(file_path):
             return False
         return True

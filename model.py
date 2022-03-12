@@ -60,18 +60,18 @@ class Model():
 
 
     def compress_sequence(self):
-        self.huffman_handler.sequence_to_binary()
+        binary_sequence = self.huffman_handler.sequence_to_binary()
         huffman_sequence, decoding_dict = self.huffman_handler.binary_to_char()
         self.current_sequence = huffman_sequence
         self.decoding_dict = decoding_dict
-        return self.current_sequence
+        return self.current_sequence , binary_sequence
 
     def decompress_sequence(self):
-        self.huffman_handler.char_to_binary()
+        binary_sequence = self.huffman_handler.char_to_binary()
         decompressed_sequence = self.huffman_handler.binary_to_sequence()
         self.bwt_handler = Bwt(decompressed_sequence)
         self.current_sequence = decompressed_sequence
-        return self.current_sequence
+        return self.current_sequence,binary_sequence
 
     def sequence_to_bwt(self):
         yield from self.bwt_handler.bwt_generator()
