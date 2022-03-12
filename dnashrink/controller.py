@@ -8,8 +8,8 @@ Controller module to coordinate between view and model
 __author__ = 'Mohamed Ouertani'
 
 from binaryornot.check import is_binary
-from model import Model
-from view import View
+from dnashrink.model import Model
+from dnashrink.view import View
 
 class Controller():
 
@@ -104,7 +104,7 @@ class Controller():
     def save(self):
         if self.model.current_sequence:
             saved_files = self.model.save_file()
-            self.view.show_warning(f"The Following files were save :\n{saved_files}")
+            self.view.show_warning(f"The Following files were saved :\n{saved_files}")
         else:
             self.view.show_warning()
 
@@ -132,9 +132,6 @@ class Controller():
     def launch_view(self):
         self.view.main()
 
-if __name__ == "__main__":
-    test = Controller()
-    test.launch_view()
 
 # def set_button_functions(self):
     #     function_dict = {}

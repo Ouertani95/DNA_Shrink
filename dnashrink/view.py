@@ -8,16 +8,15 @@ View module to display the data
 __author__ = 'Mohamed Ouertani'
 
 # Standard library imports
-from tkinter import DISABLED, END, RIGHT, Y, ttk, filedialog, messagebox
-import tkinter
-from pathlib import Path
 import tkinter as tk
+from tkinter import DISABLED, END, RIGHT, Y, ttk, filedialog, messagebox
 from tkinter.font import NORMAL
-# Third party imports
-import ttkthemes as themes
+from pathlib import Path
 
 
-class View(tkinter.Tk):
+
+
+class View(tk.Tk):
     
     def __init__(self,controller) -> None:
         self.controller = controller

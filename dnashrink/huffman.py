@@ -8,7 +8,7 @@ Huffman module to ...
 __author__ = 'Mohamed Ouertani'
 
 from collections import Counter
-from binary_tree import BinaryTree
+from dnashrink.binary_tree import BinaryTree
 
 class Huffman():
     """Huffman class for sequence compression / decompression"""

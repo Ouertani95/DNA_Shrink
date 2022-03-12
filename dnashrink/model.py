@@ -8,8 +8,8 @@ Model module to manipulate the data
 __author__ = 'Mohamed Ouertani'
 
 import os
-from bwt import Bwt
-from huffman import Huffman
+from dnashrink.bwt import Bwt
+from dnashrink.huffman import Huffman
 
 
 class Model():
