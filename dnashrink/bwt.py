@@ -27,7 +27,7 @@ class Bwt():
             actual_sequence = self.input_sequence + "$"
             sequence_len = len(actual_sequence)
             bwt_matrix = []
-            for line_index in range(sequence_len):
+            for _ in range(sequence_len):
                 bwt_matrix.append(actual_sequence)
                 yield "\n".join(bwt_matrix)
                 actual_sequence = actual_sequence[-1] + actual_sequence[:-1]
@@ -48,11 +48,11 @@ class Bwt():
             bwt_len = len(self.bwt_sequence)
             decoding_matrix = [""]*bwt_len
             split_bwt = list(self.bwt_sequence)
-            for i in range(bwt_len):
+            for _ in range(bwt_len):
                 decoding_matrix = [i + j for i, j in zip(split_bwt, decoding_matrix)]
-                yield "\n".join(decoding_matrix) 
+                yield "\n".join(decoding_matrix)
                 decoding_matrix.sort()
-                yield "\n".join(decoding_matrix) 
+                yield "\n".join(decoding_matrix)
             for dollar_sequence in decoding_matrix:
                 if dollar_sequence[bwt_len-1] == "$":
                     self.normal_sequence = dollar_sequence[:-1]
@@ -60,6 +60,5 @@ class Bwt():
             yield self.normal_sequence
 
     def input_is_bwt(self):
+        """Checks if sequence is bwt or not"""
         return "$" in self.input_sequence
-
-    

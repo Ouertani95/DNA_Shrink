@@ -30,12 +30,11 @@ class Model():
         self.current_function = None
 
         self.bwt_status = None
-        
-        
-        
+
 
 
     def file_loader(self,input_file,file_name):
+        """Loads file into model object and updates attributes"""
         self.input_sequence = self.sequence_extractor(input_file)
         self.current_file = file_name
         print(self.current_file)
@@ -50,7 +49,7 @@ class Model():
             self.bwt_handler = None
         self.huffman_handler = Huffman(self.input_sequence,self.decoding_dict)
         return self.current_sequence
-    
+
 
     def sequence_extractor(self,input_file):
         """Reads a sequence file and returns the sequence ready to be encoded"""
@@ -67,6 +66,7 @@ class Model():
         return raw_sequence
 
     def is_uncompressed(self):
+        """Verifies if a sequence is uncompressed"""
         uncompressed = True
         for char in self.current_sequence:
             if char not in ["A","T","G","C","N","$"]:
@@ -76,6 +76,7 @@ class Model():
 
 
     def compress_sequence(self):
+        """Compresses the current sequence"""
         binary_sequence = self.huffman_handler.sequence_to_binary()
         huffman_sequence, decoding_dict = self.huffman_handler.binary_to_char()
         self.current_sequence = huffman_sequence
@@ -83,6 +84,7 @@ class Model():
         return self.current_sequence , binary_sequence
 
     def decompress_sequence(self):
+        """Decompresses the current sequence"""
         binary_sequence = self.huffman_handler.char_to_binary()
         decompressed_sequence = self.huffman_handler.binary_to_sequence()
         self.bwt_handler = Bwt(decompressed_sequence)
@@ -90,6 +92,7 @@ class Model():
         return self.current_sequence,binary_sequence
 
     def sequence_to_bwt(self):
+        """Transforms normal sequence to bwt"""
         yield from self.bwt_handler.bwt_generator()
         bwt_sequence = list(self.bwt_handler.bwt_generator())[-1]
         self.current_sequence = bwt_sequence
@@ -98,15 +101,17 @@ class Model():
         self.bwt_status = True
 
     def bwt_to_sequence(self):
+        """Transforms bwt to normal sequence"""
         yield from self.bwt_handler.bwt_decoder()
         original_sequence = list(self.bwt_handler.bwt_decoder())[-1]
         self.current_sequence = original_sequence
         self.huffman_handler = Huffman(original_sequence)
         self.bwt_handler = Bwt(original_sequence)
         self.bwt_status = False
-        
+
 
     def save_file(self):
+        """Save the current sequence into .txt file"""
         if not os.path.exists("./data"):
             os.mkdir("./data")
         if self.is_uncompressed():
@@ -130,14 +135,17 @@ class Model():
 
 
     def update_current_function(self,function):
+        """Update the current function arrtibute"""
         self.current_function = function
 
 
     def get_current_sequence(self):
+        """Gets the current sequence"""
         return self.current_sequence
 
 
     def dict_to_string(self):
+        """Transforms a dictionnary into a string for the saving process"""
         string_dict = ""
         for i,j in self.decoding_dict.items():
             string_dict += f"{i}:{j},"
@@ -145,6 +153,7 @@ class Model():
 
 
     def string_to_dict(self,string_dict):
+        """Converts a string to a dictionnary to decompress the sequence"""
         dict_elements = string_dict.split(",")
         dict_elements = dict_elements[:-1]
         print(dict_elements)

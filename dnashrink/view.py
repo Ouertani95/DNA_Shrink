@@ -17,7 +17,7 @@ from pathlib import Path
 
 
 class View(tk.Tk):
-    
+    """View class representing the GUI interface"""
     def __init__(self,controller) -> None:
         self.controller = controller
         super().__init__()
@@ -28,8 +28,10 @@ class View(tk.Tk):
                         "Next","End"]
         self.labels = []
         self.text_display = None
+        self.filename = None
 
     def create_interface(self):
+        """Creates the interface and all the widgets inside"""
         #Create main frame
         main_frame = ttk.Frame(self)
         main_frame.pack()
@@ -42,19 +44,21 @@ class View(tk.Tk):
         style = ttk.Style()
 
         #Configure the properties of the Buttons
-        style.configure('style.TButton', font=("Palatino Linotype", 12, "bold"), foreground="#3a86ff")
-        
+        style.configure('style.TButton',
+                        font=("Palatino Linotype", 12, "bold"), foreground="#3a86ff")
+
         #Create all the buttons
         column,row = 0,0
         for button_number,button_text in enumerate(self.buttons):
             button = ttk.Button(main_frame,text=button_text,style='style.TButton',
-                                command=lambda button = button_text :self.controller.function_handler(button))
+                                command=lambda button = button_text :
+                                self.controller.function_handler(button))
             button.grid(column=column,row=row, padx=10,pady=10,sticky="news")
             if button_number == 5:
                 row +=1
             if column > 0 and column %2 == 1:
                 column = 0
-                row += 1 
+                row += 1
             else:
                 column += 1
 
@@ -90,6 +94,7 @@ class View(tk.Tk):
         self.geometry(f"{width}x{height}+{x_offset}+{y_offset}")
 
     def open_file(self):
+        """Opens windows to choose new file from local directories"""
         self.filename = filedialog.askopenfilename(initialdir="./",
                                                    title="Select a file",
                                                    filetypes=(("text files","*.txt"),
@@ -100,16 +105,19 @@ class View(tk.Tk):
             name_file = ""
             messagebox.showwarning("File selection","No selected file")
         else :
-            name_file = Path(self.filename).stem #extracts file name without extension from selected local file
+            #extracts file name without extension from selected local file
+            name_file = Path(self.filename).stem
             messagebox.showwarning("File selection",f"Selected file : {name_file}")
         return self.filename , name_file
 
-
-    def show_warning(self,message="No sequence is loaded :\nPlease select a file first"):
+    @staticmethod
+    def show_warning(message="No sequence is loaded :\nPlease select a file first"):
+        """Shows wanted message"""
         messagebox.showwarning("File selection",message)
 
 
     def update_text(self,text):
+        """Updates the text widget content"""
         self.text_display.configure(state=NORMAL)
         self.text_display.delete(1.0, "end")   #Clear the text window so we can write.
         self.text_display.insert(END,text)

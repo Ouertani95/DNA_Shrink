@@ -29,6 +29,7 @@ class Huffman():
         self.binary_sequence = None
 
     def sequence_checker(self):
+        """Checks if sequence is uncompressed or not"""
         uncompressed = True
         for char in self.input_sequence:
             if char not in ["A","T","G","C","N","$"]:
@@ -67,7 +68,7 @@ class Huffman():
                 partial_sequence = self.binary_sequence[i:len_binary]
                 self.huffman_sequence += chr(int(partial_sequence,2))
                 break
-        
+
         print("Compressed sequence : ",self.huffman_sequence)
         # print(type(self.huffman_sequence))
 
@@ -85,6 +86,7 @@ class Huffman():
         return self.huffman_sequence,self.decoding_dict
 
     def char_to_binary(self):
+        """Transforms a compressed sequence to binary"""
         self.binary_sequence = ""
         for index,char in enumerate(self.huffman_sequence):
             if index != len(self.huffman_sequence)-1:

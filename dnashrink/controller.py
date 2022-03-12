@@ -13,12 +13,15 @@ from dnashrink.view import View
 
 class Controller():
 
+    """Controller class to coordinate between model and view"""
+
     def __init__(self) -> None:
         self.model = Model(self)
         self.view = View(self)
         # self.button_functions = self.set_button_functions()
-      
+
     def function_handler(self,function):
+        """Handles functions"""
         if function != "Open" and not self.model.huffman_handler:
             self.view.show_warning()
         else:
@@ -40,15 +43,17 @@ class Controller():
                 self.jump_to_end()
 
     def compression(self):
+        """Compresses the current sequence"""
         if self.model.is_uncompressed():
             compressed_seq,binary_sequence = self.model.compress_sequence()
             self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
                                  +f"Compressed sequence : {compressed_seq}")
         else:
             self.view.show_warning("Sequence is already compressed")
-        
+
 
     def decompression(self):
+        """Decompresses the current compressed sequence"""
         if not self.model.is_uncompressed():
             decompressed_seq,binary_sequence = self.model.decompress_sequence()
             self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
@@ -57,29 +62,32 @@ class Controller():
             self.view.show_warning("Sequence is already decompressed")
 
     def transform_bwt(self):
+        """Transforms normal sequence to bwt"""
         if self.model.is_uncompressed():
             if not self.model.bwt_handler.input_is_bwt():
                 bwt_generator = self.model.sequence_to_bwt()
                 self.model.update_current_function(bwt_generator)
-                self.view.update_text("""Transform bwt function, Press Next or End to continue""")
+                self.view.update_text("""Transform to bwt, Press Next or End to continue""")
             else:
                 self.view.show_warning("Sequence is already BWT")
         else:
             self.view.show_warning("Sequence is compressed\nTry decompressing first")
-        
+
 
     def transform_sequence(self):
+        """Transforms bwt sequence to normal"""
         if self.model.is_uncompressed():
             if self.model.bwt_handler.input_is_bwt():
                 bwt_decoder = self.model.bwt_to_sequence()
                 self.model.update_current_function(bwt_decoder)
-                self.view.update_text("""Transform sequence function, Press Next or End to continue""")
+                self.view.update_text("""Transform to sequence , press Next or End to continue""")
             else:
                 self.view.show_warning("Sequence is already normal")
         else:
             self.view.show_warning("Sequence is compressed\nTry decompressing first")
 
     def step_by_step(self):
+        """Shows the results step by step on text widget"""
         if self.model.current_function:
             try:
                 next_value = next(self.model.current_function)
@@ -91,6 +99,7 @@ class Controller():
             self.view.show_warning("No function is chosen yet")
 
     def jump_to_end(self):
+        """Skips to last result"""
         if self.model.current_function:
             try:
                 last_value = list(self.model.current_function)[-1]
@@ -102,6 +111,7 @@ class Controller():
             self.view.show_warning("No function is chosen yet")
 
     def save(self):
+        """Save the current sequence"""
         if self.model.current_sequence:
             saved_files = self.model.save_file()
             self.view.show_warning(f"The Following files were saved :\n{saved_files}")
@@ -109,6 +119,7 @@ class Controller():
             self.view.show_warning()
 
     def open(self):
+        """Open a new sequence file"""
         file_path,file_name = self.view.open_file()
         if file_path:
             # if self.is_plain_text(file_path):
@@ -118,7 +129,9 @@ class Controller():
             #     self.view.show_warning("wrong file format")
             #     #"Sequence longer than 50 :\nTry another file"
 
-    def is_plain_text(self,file_path):
+    @staticmethod
+    def is_plain_text(file_path):
+        """Verifies if a file is plain text"""
         with open (file_path,"r") as file_check:
             try:
                 content = file_check.read()
@@ -130,6 +143,7 @@ class Controller():
 
 
     def launch_view(self):
+        """launches the GUI interface"""
         self.view.main()
 
 
