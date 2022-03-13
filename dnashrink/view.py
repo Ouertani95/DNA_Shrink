@@ -45,7 +45,7 @@ class View(tk.Tk):
         #Initialize the attributes
         self.controller = controller
         self.title("Huffman/BWT")
-        self.geometry("700x600")
+        self.geometry("700x620")
         self.buttons = ["Open","Save","Compress","Decompress",
                         "Sequence to BWT","BWT to sequence",
                         "Next","End"]
@@ -98,8 +98,8 @@ class View(tk.Tk):
         y_scroll_bar.pack(side=RIGHT,fill=Y)
 
         #Create text widget
-        self.text_display = tk.Text(text_frame,height=22,yscrollcommand=y_scroll_bar.set,
-                                    width=80,state=DISABLED)
+        self.text_display = tk.Text(text_frame,height=20,yscrollcommand=y_scroll_bar.set,
+                                    width=65,state=DISABLED,font=(10))
         self.text_display.pack()
 
         #Configure scrollbar
@@ -133,7 +133,7 @@ class View(tk.Tk):
         self.geometry(f"{width}x{height}+{x_offset}+{y_offset}")
 
     @staticmethod
-    def open_file():
+    def open_file() -> tuple:
         """
         Static class method for opening new window to choose file from local directories
 

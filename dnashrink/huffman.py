@@ -8,10 +8,13 @@ decompress DNA sequences using the Huffman algorithm
 
 __author__ = 'Mohamed Ouertani'
 
+# Standard library imports
 from collections import Counter
+# Local application imports
 from dnashrink.binary_tree import BinaryTree
 
 class Huffman():
+
     """
     Huffman class for sequence compression / decompression
 
@@ -32,7 +35,15 @@ class Huffman():
     binary_sequence : str
         Intermediate binary sequence for compression and decompression steps
     """
+
     def __init__(self,input_sequence,decoding_dict=None) -> None:
+        """
+        Class constructor method for initializing all the attributes
+
+        Returns:
+        ----------
+        None
+        """
         self.input_sequence = input_sequence
         if self.sequence_checker():
             self.original_sequence = input_sequence
@@ -168,7 +179,6 @@ class Huffman():
         original sequence : str
             The final decompressed sequence obtained using the Huffman algorithm
         """
-
         self.original_sequence = ""
         sequence_length = len(self.binary_sequence)
         i = 0
