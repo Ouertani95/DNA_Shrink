@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-View module to display the data
+View module part of the MVC architechture that represents
+the UI logic of the application
 """
 
 __author__ = 'Mohamed Ouertani'
@@ -14,13 +15,35 @@ from tkinter.font import NORMAL
 from pathlib import Path
 
 
-
-
 class View(tk.Tk):
-    """View class representing the GUI interface"""
+
+    """View class representing the GUI interface.
+    The View class inherits all the methods and attributes of the tkinter Class.
+
+    Attributes
+    ----------
+    controller : Controller
+        Controller logic that interacts with the view
+    buttons : List[str]
+        All the button titles present in the interface
+    labels : List[Label Widgets]
+        All the labels present in the Interface
+    text_display : Text widget
+        Text widget to display all the results
+    """
+
     def __init__(self,controller) -> None:
-        self.controller = controller
+        """
+        Class constructor method for initializing all the attributes
+
+        Returns:
+        ----------
+        None
+        """
+        #Initialize the tk.Tk superclass
         super().__init__()
+        #Initialize the attributes
+        self.controller = controller
         self.title("Huffman/BWT")
         self.geometry("700x600")
         self.buttons = ["Open","Save","Compress","Decompress",
@@ -28,10 +51,15 @@ class View(tk.Tk):
                         "Next","End"]
         self.labels = []
         self.text_display = None
-        self.filename = None
 
-    def create_interface(self):
-        """Creates the interface and all the widgets inside"""
+    def create_interface(self) -> None:
+        """
+        Class method for Creation of interface and all the widgets inside
+
+        Returns:
+        ----------
+        None
+        """
         #Create main frame
         main_frame = ttk.Frame(self)
         main_frame.pack()
@@ -40,10 +68,8 @@ class View(tk.Tk):
         self.tk.call("source", "./Sun-Valley-ttk-theme-master/sun-valley.tcl")
         self.tk.call("set_theme", "dark")
 
-        #Create an instance of Style Object
+        #Create an instance of Style Object and Configure the styles of the Buttons
         style = ttk.Style()
-
-        #Configure the properties of the Buttons
         style.configure('style.TButton',
                         font=("Palatino Linotype", 12, "bold"), foreground="#3a86ff")
 
@@ -62,7 +88,7 @@ class View(tk.Tk):
             else:
                 column += 1
 
-        #Create frame inside search result window
+        #Create new frame inside the main frame
         text_frame = ttk.Frame(main_frame)
         text_frame.grid(column=0,row=3,columnspan=2,
                         padx=5,pady=5,sticky="news")
@@ -83,49 +109,106 @@ class View(tk.Tk):
         self.update_text("No sequence is loaded, please choose a file to start.")
 
 
-    def center_window(self):
-        """Center the GUI window inside the screen"""
-        self.update() #update object states (used to return new value of h / w)
+    def center_window(self) -> None:
+        """
+        Class method used to center the GUI window inside the screen
+
+        Returns:
+        ----------
+        None
+        """
+        #update window height and width according to the widgets
+        self.update()
+
+        #Get the width and height of the window
         width = self.winfo_width()
         height = self.winfo_height()
+
+        #Get the coordinates representing the middle of the screen
         x_offset = ((self.winfo_screenwidth() - width) // 2 )
-        # // is to return int of devision not float
         y_offset = ((self.winfo_screenheight() - height) // 2 )
+        # // is to return int of devision not float
+
+        #Set the new geometry/positioning of the window
         self.geometry(f"{width}x{height}+{x_offset}+{y_offset}")
 
-    def open_file(self):
-        """Opens windows to choose new file from local directories"""
-        self.filename = filedialog.askopenfilename(initialdir="./",
+    @staticmethod
+    def open_file():
+        """
+        Static class method for opening new window to choose file from local directories
+
+        Returns:
+        ----------
+        file_path : str
+            path of the chosen file
+        name_file : str
+            name of the chosen file extracted from the file path with no extension
+        """
+        #Open filedialog window for file selection
+        file_path = filedialog.askopenfilename(initialdir="./",
                                                    title="Select a file",
                                                    filetypes=(("text files","*.txt"),
                                                               ("fasta file",".fasta"),
                                                               ("all files","*.*")))
-        print(self.filename)
-        if (len(self.filename)) == 0 :
+        print(file_path)
+        #Check if a file is selected or not and show message
+        if (len(file_path)) == 0 :
             name_file = ""
             messagebox.showwarning("File selection","No selected file")
         else :
-            #extracts file name without extension from selected local file
-            name_file = Path(self.filename).stem
+            #Extract file name without extension from the file path
+            name_file = Path(file_path).stem
             messagebox.showwarning("File selection",f"Selected file : {name_file}")
-        return self.filename , name_file
+        return file_path , name_file
 
     @staticmethod
-    def show_warning(message="No sequence is loaded :\nPlease select a file first"):
-        """Shows wanted message"""
+    def show_warning(message="No sequence is loaded :\nPlease select a file first") -> None:
+        """
+        Static class method to show input message given by the Controller
+
+        Parameters
+        -----------
+        message : str
+            Input message given by the Controller
+
+        Returns:
+        ----------
+        None
+        """
         messagebox.showwarning("File selection",message)
 
 
-    def update_text(self,text):
-        """Updates the text widget content"""
+    def update_text(self,text:str) -> None:
+        """
+        Class method to update the text widget content with request results
+
+        Parameters
+        -----------
+        text : str
+            Results from the model class passed by the Controller to be displayed
+
+        Returns
+        -----------
+        None
+        """
+        #Remove readonly status of the text widget
         self.text_display.configure(state=NORMAL)
-        self.text_display.delete(1.0, "end")   #Clear the text window so we can write.
+        #Clear the text widget content
+        self.text_display.delete(1.0, "end")
+        #Insert the input text
         self.text_display.insert(END,text)
+        #Reestablish readonly status of the text widget
         self.text_display.configure(state=DISABLED)
 
 
-    def main(self):
-        """Launch the GUI"""
+    def main(self) -> None:
+        """
+        Main class method to launch the GUI by calling window specific methods
+
+        Returns
+        -----------
+        None
+        """
         self.create_interface()
         self.center_window()
         self.mainloop()
