@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Huffman module to ...
+Huffman module part of the dnashrink package to compress or 
+decompress DNA sequences using the Huffman algorithm
 """
 
 __author__ = 'Mohamed Ouertani'
@@ -11,8 +12,27 @@ from collections import Counter
 from dnashrink.binary_tree import BinaryTree
 
 class Huffman():
-    """Huffman class for sequence compression / decompression"""
-    def __init__(self,input_sequence,decoding_dict=None):
+    """
+    Huffman class for sequence compression / decompression
+
+    Attributes
+    ----------
+    input_sequence : str
+        Initial sequence passed by the Controller to be compressed/decompressed
+    original_sequence : str
+        Non-binary decompressed DNA sequence
+    binary_tree : BinaryTree
+        Binary tree created using the sequence
+    coding_dict : Dict
+        Dictionnary used for transforming DNA sequence to binary
+    decoding_dict : Dict
+        Dictionnary used for transforming binary sequence back to original DNA sequence
+    huffman_sequence : str
+        Final compressed sequence obtained after the Huffman compression algorithm 
+    binary_sequence : str
+        Intermediate binary sequence for compression and decompression steps
+    """
+    def __init__(self,input_sequence,decoding_dict=None) -> None:
         self.input_sequence = input_sequence
         if self.sequence_checker():
             self.original_sequence = input_sequence
@@ -28,8 +48,15 @@ class Huffman():
             self.huffman_sequence = input_sequence
         self.binary_sequence = None
 
-    def sequence_checker(self):
-        """Checks if sequence is uncompressed or not"""
+    def sequence_checker(self) -> bool:
+        """
+        Class method for checking if input_sequence attribute is uncompressed or not
+
+        Returns:
+        ----------
+        uncompressed : bool
+            Boolean variable result for compression verification 
+        """
         uncompressed = True
         for char in self.input_sequence:
             if char not in ["A","T","G","C","N","$"]:
@@ -37,84 +64,129 @@ class Huffman():
                 break
         return uncompressed
 
-    def car_frequency(self):
-        """Calculates character frequencies in the sequence"""
+    def car_frequency(self) -> list:
+        """
+        Class method to calculate character frequencies in the original_sequence attribute
+
+        Returns:
+        ----------
+        counts_list : list[tuples]
+            A list of all the characters in the original_sequence and their corresponding
+            frequencies ordered in a descending order by frequencies 
+        """
+        #Count all character occurences in the sequence using Counter object
         counts = Counter(self.original_sequence)
+        #Sort all the counted characters using their frequencies in a descending order
         counts_list = sorted(counts.items(), key=lambda x:x[1])
-        print("frequency list : ",counts_list)
         return counts_list
 
-    def sequence_to_binary(self):
-        """Compresses the sequence into binary code"""
+    def sequence_to_binary(self) -> str:
+        """
+        Class method to transform the original_sequence nucleotides into binary code 
+        using the coding_dict
+
+        Returns:
+        ----------
+        binary_sequence : str
+            Final binary sequence after transformation
+        """
         self.binary_sequence = ""
+        #Fill binary_sequence with binary code corresponding to each nucleotide from coding_dict
         for nuc in self.original_sequence:
             self.binary_sequence += self.coding_dict[nuc]
-        print("initial sequence : ",self.original_sequence)
-        print("coding dictionnary : ",self.coding_dict)
-        print("binary sequence  =  ",self.binary_sequence)
         return self.binary_sequence
 
-    def binary_to_char(self):
-        """Transforms compressed binary sequence to 8 bit characters"""
+    def binary_to_char(self) -> str:
+        """
+        Class method to transform binary_sequence by taking 8 bits at a time 
+        and converting them to their corresponding Char using UTF-8 encoding
+
+        Returns:
+        ----------
+        huffman_sequence : str
+            The final compressed sequence of the Huffman compression algorithm
+        decoding_dict : Dict
+            The new decoding dictionnary with the last Char number of bits needed
+            for decompressing the sequence
+        """
         self.huffman_sequence = ""
         len_binary = len(self.binary_sequence)
         i=0
+        #Transforming the binary sequence to Char sequence
         while i < len_binary:
-            if i+8 <= len_binary:
+            if i+8 <= len_binary: 
                 partial_sequence = self.binary_sequence[i:i+8]
                 self.huffman_sequence += chr(int(partial_sequence,2))
                 i = i+8
-            else:
+            else: #Condition for the last Char transformation
                 partial_sequence = self.binary_sequence[i:len_binary]
                 self.huffman_sequence += chr(int(partial_sequence,2))
                 break
 
-        print("Compressed sequence : ",self.huffman_sequence)
-        # print(type(self.huffman_sequence))
-
+        #Calculating the number of bits of the last Char
         len_compressed = len(self.huffman_sequence)
         last_char = self.huffman_sequence[len_compressed-1]
         last_bits = len_binary%8
 
+        #Adding the last character and it's number of bits to decoding_dict
         if last_bits == 0:
             self.decoding_dict[last_char] = 8
         else:
             self.decoding_dict[last_char] = last_bits
 
-        print("new decoding dictionnary : ",self.decoding_dict)
-
         return self.huffman_sequence,self.decoding_dict
 
-    def char_to_binary(self):
-        """Transforms a compressed sequence to binary"""
+    def char_to_binary(self) -> str:
+        """
+        Class method to transform a compressed sequence to binary
+        
+        Returns:
+        ----------
+        binary_sequence : str
+            Intermediate binary sequence obtained from decompressing the Huffman_sequence
+        """
+        #Transforming the Char sequence to binary sequence
         self.binary_sequence = ""
         for index,char in enumerate(self.huffman_sequence):
             if index != len(self.huffman_sequence)-1:
+                #Transform Char to binary int and fill first characters with 0 to obtain 8 bit code
                 binary_char = str(format(ord(char),'b')).zfill(8)
-            else:
+            else: 
+                #Replace the last Char by binary equivalent with number of bits from decoding_dict
                 decoding_keys = list(self.decoding_dict.values())
                 binary_char = str(format(ord(char),'b')).zfill(int(decoding_keys[-1]))
+            #Add partial binary seq to binary_sequence
             self.binary_sequence += binary_char
-        print("char to binary seq: ",self.binary_sequence)
         return self.binary_sequence
 
-    def binary_to_sequence(self):
-        """Decompresses the sequence"""
-        print("decoding dictionnary : ",self.decoding_dict)
+    def binary_to_sequence(self) -> str:
+        """
+        Class method for the final step of decompressing the sequence
+
+        Returns:
+        ----------
+        original sequence : str
+            The final decompressed sequence obtained using the Huffman algorithm
+        """
+
         self.original_sequence = ""
-        seq_len = len(self.binary_sequence)
+        sequence_length = len(self.binary_sequence)
         i = 0
-        len_sub = 1
-        while i + len_sub <= seq_len:
-            subbinary_sequence = self.binary_sequence[i:i+len_sub]
+        length_subsequence = 1
+        #Transforming the binary sequence to original DNA sequence
+        while i + length_subsequence <= sequence_length:
+            subbinary_sequence = self.binary_sequence[i:i+length_subsequence]
             if subbinary_sequence in self.decoding_dict.keys():
+                #If subsequence is in dictionnary add the corresponding value to original_sequence
                 self.original_sequence += self.decoding_dict[subbinary_sequence]
-                i = i + len_sub
-                len_sub = 1
-            else:
-                len_sub += 1
+                i = i + length_subsequence
+                length_subsequence = 1
+            else: #If subsequence is not in the dictionnary increase it's length
+                length_subsequence += 1
+        #Calculate frequency of new original_sequence
         self.frequency_list = self.car_frequency()
+        #Build BinaryTree corresonding to new original_sequence
         self.binary_tree = BinaryTree().tree_builder(self.frequency_list)
+        #Create new coding and decoding dictionnaries
         self.coding_dict, self.decoding_dict = self.binary_tree.get_tree_leaves()
-        print("decompressed sequence : ",self.original_sequence)
         return self.original_sequence
