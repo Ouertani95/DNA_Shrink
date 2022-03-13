@@ -21,7 +21,7 @@ class Huffman():
     Attributes
     ----------
     input_sequence : str
-        Initial sequence passed by the Controller to be compressed/decompressed
+        Initial sequence passed by the Model to be compressed/decompressed
     original_sequence : str
         Non-binary decompressed DNA sequence
     binary_tree : BinaryTree
@@ -39,6 +39,13 @@ class Huffman():
     def __init__(self,input_sequence,decoding_dict=None) -> None:
         """
         Class constructor method for initializing all the attributes
+
+        Parameters
+        -----------
+        input_sequence : str
+            Sequence passed by the Model to be compressed/decompressed
+        decoding_dict : dict (default = None)
+            Dictionnary used for decompression if input sequence is already compressed
 
         Returns:
         ----------

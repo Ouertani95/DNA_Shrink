@@ -18,7 +18,7 @@ class Bwt():
     Attributes
     ----------
     input_sequence : str
-        Input sequence passed by the Controller to be transformed
+        Input sequence passed by the Model to be transformed
     normal_sequence : str
         Original sequence obtained after reverse Burrows-Wheeler Transform
     bwt_sequence : str
@@ -28,7 +28,13 @@ class Bwt():
     def __init__(self,input_sequence:str) -> None:
         """
         Class method for Creation of interface and all the widgets inside
-
+        
+        Parameters
+        -----------
+        input_sequence : str
+            input sequence to be transformed or reverse transformed 
+            using Burrows-Wheeler algorithm
+        
         Returns:
         ----------
         None
