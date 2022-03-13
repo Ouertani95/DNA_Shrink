@@ -3,13 +3,23 @@
 
 """Main script to launch the program"""
 
-from __future__ import absolute_import
+__author__ = 'Mohamed Ouertani'
+
 from dnashrink.controller  import Controller
 
 def main() -> None:
-    """Launches the program."""
-    brains = Controller()
-    brains.launch_view()
+    """
+    main function used to launch the program
 
+    Returns:
+    ----------
+    None
+    """
+    #Initiate Controller Object
+    coordinator = Controller()
+    #Launch the GUI
+    coordinator.launch_view()
+
+#Execute main function
 if __name__ == "__main__":
     main()
