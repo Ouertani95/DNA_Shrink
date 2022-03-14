@@ -18,8 +18,8 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    install_requires=["binaryornot==0.4.4",
-                      "setuptools==45.2.0]"
+    install_requires=[
+                    "setuptools==45.2.0"
                       ],
     extras_require={
         'dev': [
