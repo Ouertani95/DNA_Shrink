@@ -1,2 +1,1 @@
-binaryornot==0.4.4
 setuptools==45.2.0
