@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Controller module part of the MVC architechture  that acts as a middle-man 
+Controller module part of the MVC architechture  that acts as a middle-man
 between Model and View components to process all  the business logic and incoming requests,
 manipulate data  using the Model component  and interact with the Views to render the final output
 """
@@ -70,13 +70,13 @@ class Controller():
                 self.step_by_step()
             elif function == "End":
                 self.jump_to_end()
-        
+
 
     def compression(self) -> None:
         """
         Class method that calls model for compression method then displays
         compression results
-        
+
         Returns:
         ----------
         None
@@ -125,8 +125,8 @@ class Controller():
         #Verify if sequence is uncompressed
         if self.model.is_uncompressed():
             #Verify if sequence is not bwt
-            if not self.model.bwt_handler.input_is_bwt(): #TODO: add the method to model instead
-                #Call model sequence_to_bwt method 
+            if not self.model.bwt_handler.input_is_bwt():
+                #Call model sequence_to_bwt method
                 bwt_generator = self.model.sequence_to_bwt()
                 #Update model's current_function attribute with bwt transformation method
                 self.model.update_current_function(bwt_generator)
@@ -152,7 +152,7 @@ class Controller():
         #Verify if sequence is uncompressed
         if self.model.is_uncompressed():
             #Verify if sequence is bwt
-            if self.model.bwt_handler.input_is_bwt(): #TODO: add the method to model instead
+            if self.model.bwt_handler.input_is_bwt():
                 #Call model bwt_to_sequence method
                 bwt_decoder = self.model.bwt_to_sequence()
                 #Update model's current_function attribute with reverse bwt transformation method
@@ -195,10 +195,10 @@ class Controller():
 
     def jump_to_end(self) -> None:
         """
-        Class method linked to end button from view that displays 
-        the last result directly from the model'l current_function 
+        Class method linked to end button from view that displays
+        the last result directly from the model'l current_function
         attribute
-        
+
         Returns:
         ----------
         None
@@ -222,7 +222,7 @@ class Controller():
 
     def save(self) -> None:
         """
-        Class method linked to save button in view which is used 
+        Class method linked to save button in view which is used
         to Save the current sequence
 
         Returns:
@@ -241,7 +241,7 @@ class Controller():
 
     def open(self) -> None:
         """
-        Class method to open a new sequence file using the view's open_file method 
+        Class method to open a new sequence file using the view's open_file method
         then load the sequence to the program using the model's file_loader method
 
         Returns:
@@ -250,7 +250,7 @@ class Controller():
         """
         #Recover file_path and file_name after opening new file
         file_path,file_name = self.view.open_file()
-        #Verify if a file is actually chosen 
+        #Verify if a file is actually chosen
         if file_path:
             #Load file sequence to program using model's file_loader method
             loaded_sequence = self.model.file_loader(file_path,file_name)
@@ -260,7 +260,7 @@ class Controller():
     def launch_view(self) -> None:
         """
         Class method to launch the GUI interface using the view's main method
-        
+
         Returns:
         ----------
         None

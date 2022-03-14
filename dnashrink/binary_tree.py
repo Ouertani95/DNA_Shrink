@@ -12,7 +12,7 @@ class Node:
 
     """
     Node class used for Tree construction
-    
+
     Attributes
     ----------
     freq : int
@@ -73,7 +73,7 @@ class Node:
     def get_zero(self):
         """
         Class method to get node assigned to zero branch
-        
+
         Returns:
         ----------
         zero : Node
@@ -84,7 +84,7 @@ class Node:
     def set_zero(self,node) -> None:
         """
         Class method that assigns a Node to zero branch
-        
+
         Parameters
         -----------
         node : Node
@@ -99,7 +99,7 @@ class Node:
     def get_one(self):
         """
         Class method to get node assigned to one branch
-        
+
         Returns:
         ----------
         one : Node
@@ -110,7 +110,7 @@ class Node:
     def set_one(self,node):
         """
         Class method that assigns a Node to one branch
-        
+
         Parameters
         -----------
         node : Node
@@ -139,7 +139,7 @@ class Node:
     def is_leaf(self) -> bool:
         """
         Class method that verifies if a node is a leaf
-        
+
         Returns:
         ----------
         bool
@@ -153,11 +153,11 @@ class Node:
         Class recursive method that gets all leaves of the Node
         This method also fills the coding and decoding leaves while searching
         for the leaves of the binary tree
-        
+
         Parameters
         -----------
         binary_tree :
-            BinaryTree Object from which to extract the leaves; could be the head node of 
+            BinaryTree Object from which to extract the leaves; could be the head node of
             that tree
         car_code :
             Represents the path to a certain leaf inside the tree. It is initialized to an empty
@@ -197,7 +197,7 @@ class Node:
     def __str__(self) -> str:
         """
         Class method used to format displayed content when print is called on Node object
-        
+
         Returns:
         ----------
         str :
@@ -239,9 +239,9 @@ class BinaryTree():
         Parameters
         -----------
         list_frequencies : list[int]
-            An list of all the characters and their corresponding frequencies which is in 
+            An list of all the characters and their corresponding frequencies which is in
             a descending order by the frequencies
-        
+
         Returns:
         ----------
         BinaryTree :
@@ -262,7 +262,7 @@ class BinaryTree():
                 i += 2
             #Check if only 2 Nodes are left to add
             elif i == len(list_frequencies)-2:
-                #Assign previous head Node to first sister Node 
+                #Assign previous head Node to first sister Node
                 first_sibling = self.head_node
                 #Caluclate the sum of the last 2 frequencies
                 last_two_freq = list_frequencies[i][1] + list_frequencies[i+1][1]
@@ -311,9 +311,9 @@ class BinaryTree():
 
     def __str__(self) -> str:
         """
-        Class method used to format displayed content when print 
+        Class method used to format displayed content when print
         is called on BinarTree object
-        
+
         Returns:
         ----------
         str :

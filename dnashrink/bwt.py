@@ -28,13 +28,13 @@ class Bwt():
     def __init__(self,input_sequence:str) -> None:
         """
         Class method for Creation of interface and all the widgets inside
-        
+
         Parameters
         -----------
         input_sequence : str
-            input sequence to be transformed or reverse transformed 
+            input sequence to be transformed or reverse transformed
             using Burrows-Wheeler algorithm
-        
+
         Returns:
         ----------
         None
@@ -46,7 +46,7 @@ class Bwt():
     def bwt_generator(self) -> Generator:
 
         """
-        Class method that returns all the steps of the Burrows-Wheeler Transform 
+        Class method that returns all the steps of the Burrows-Wheeler Transform
         from a created Burrows-Wheeler matrix using the input sequence.
         The Burrows-Wheeler Transform corresponds to the last column of the matrix.
 
@@ -90,7 +90,7 @@ class Bwt():
         Generator :
             The Burrows-Wheeler reverse transformation steps
         """
-        
+
         self.bwt_sequence = self.input_sequence
         bwt_length = len(self.bwt_sequence)
         #Filling decoding list with empty string
@@ -121,7 +121,7 @@ class Bwt():
 
         Returns
         -------
-        bool : 
+        bool :
             Result of bwt verification
         """
         return "$" in self.input_sequence

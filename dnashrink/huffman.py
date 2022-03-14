@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Huffman module part of the dnashrink package to compress or 
+Huffman module part of the dnashrink package to compress or
 decompress DNA sequences using the Huffman algorithm
 """
 
@@ -31,7 +31,7 @@ class Huffman():
     decoding_dict : Dict
         Dictionnary used for transforming binary sequence back to original DNA sequence
     huffman_sequence : str
-        Final compressed sequence obtained after the Huffman compression algorithm 
+        Final compressed sequence obtained after the Huffman compression algorithm
     binary_sequence : str
         Intermediate binary sequence for compression and decompression steps
     """
@@ -73,7 +73,7 @@ class Huffman():
         Returns:
         ----------
         uncompressed : bool
-            Boolean variable result for compression verification 
+            Boolean variable result for compression verification
         """
         uncompressed = True
         for char in self.input_sequence:
@@ -90,7 +90,7 @@ class Huffman():
         ----------
         counts_list : list[tuples]
             A list of all the characters in the original_sequence and their corresponding
-            frequencies ordered in a descending order by frequencies 
+            frequencies ordered in a descending order by frequencies
         """
         #Count all character occurences in the sequence using Counter object
         counts = Counter(self.original_sequence)
@@ -100,7 +100,7 @@ class Huffman():
 
     def sequence_to_binary(self) -> str:
         """
-        Class method to transform the original_sequence nucleotides into binary code 
+        Class method to transform the original_sequence nucleotides into binary code
         using the coding_dict
 
         Returns:
@@ -116,7 +116,7 @@ class Huffman():
 
     def binary_to_char(self) -> str:
         """
-        Class method to transform binary_sequence by taking 8 bits at a time 
+        Class method to transform binary_sequence by taking 8 bits at a time
         and converting them to their corresponding Char using UTF-8 encoding
 
         Returns:
@@ -132,7 +132,7 @@ class Huffman():
         i=0
         #Transforming the binary sequence to Char sequence
         while i < len_binary:
-            if i+8 <= len_binary: 
+            if i+8 <= len_binary:
                 partial_sequence = self.binary_sequence[i:i+8]
                 self.huffman_sequence += chr(int(partial_sequence,2))
                 i = i+8
@@ -157,7 +157,7 @@ class Huffman():
     def char_to_binary(self) -> str:
         """
         Class method to transform a compressed sequence to binary
-        
+
         Returns:
         ----------
         binary_sequence : str
@@ -169,7 +169,7 @@ class Huffman():
             if index != len(self.huffman_sequence)-1:
                 #Transform Char to binary int and fill first characters with 0 to obtain 8 bit code
                 binary_char = str(format(ord(char),'b')).zfill(8)
-            else: 
+            else:
                 #Replace the last Char by binary equivalent with number of bits from decoding_dict
                 decoding_keys = list(self.decoding_dict.values())
                 binary_char = str(format(ord(char),'b')).zfill(int(decoding_keys[-1]))

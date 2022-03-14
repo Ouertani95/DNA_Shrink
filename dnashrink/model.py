@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Model module part of the MVC architechture that represents the component 
+Model module part of the MVC architechture that represents the component
 interacting and manipulating the data directly under the commands of the Controller
 """
 
@@ -24,10 +24,10 @@ class Model():
     controller : Controller
         Controller object that calls the model
     bwt_handler : Bwt
-        Bwt object to be called for Burrows-Wheeler transform 
+        Bwt object to be called for Burrows-Wheeler transform
         and reverse transform on DNA sequences
     huffman_handler : Huffman
-        Huffman object to be called for Huffman compression and 
+        Huffman object to be called for Huffman compression and
         decompression of DNA sequences
     decoding_dict : dict
         Dictionnary necessary for Decompression of DNA sequences
@@ -90,7 +90,7 @@ class Model():
         return self.current_sequence
 
 
-    def sequence_extractor(self,input_file) -> str: #TODO : modify opening process
+    def sequence_extractor(self,input_file) -> str:
         """
         Class method to read a sequence file and extract the sequence inside
 
@@ -122,7 +122,7 @@ class Model():
         #Clean the sequence by removing spaces and backlines
         raw_sequence = raw_sequence.replace(" ","")
         raw_sequence = raw_sequence.replace("\n","")
-        
+
         return raw_sequence
 
     def is_uncompressed(self) -> bool:
@@ -132,7 +132,7 @@ class Model():
         Returns:
         ----------
         uncompressed : bool
-            Verification result of compression status of self.current_sequence 
+            Verification result of compression status of self.current_sequence
         """
         uncompressed = True
         for char in self.current_sequence:
@@ -165,7 +165,7 @@ class Model():
     def decompress_sequence(self) -> str:
         """
         Class method that decompresses the current sequence
-        
+
         Returns:
         ----------
         current_sequence : str
@@ -229,7 +229,7 @@ class Model():
         Returns:
         ----------
         file_name : str
-            Name of the file that was saved in data directory    
+            Name of the file that was saved in data directory
         """
         #verify if data directory / if not create it
         if not os.path.exists("./data"):
@@ -277,7 +277,7 @@ class Model():
     def get_current_sequence(self) -> str:
         """
         Class method used to get the current sequence
-        
+
         Returns:
         ----------
         current_sequence : str
@@ -308,14 +308,14 @@ class Model():
 
     def string_to_dict(self,string_dict) -> None:
         """
-        Class method that converts a decoding_dict from string 
+        Class method that converts a decoding_dict from string
         format to a dictionnary for the decompression of the sequence
 
         Parameters
         -----------
         string_dict : str
             Decoding_dict in string format to be converted into a dictionnary
-        
+
         Returns:
         ----------
         None
