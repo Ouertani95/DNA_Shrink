@@ -9,7 +9,6 @@ manipulate data  using the Model component  and interact with the Views to rende
 
 __author__ = 'Mohamed Ouertani'
 
-from binaryornot.check import is_binary
 from dnashrink.model import Model
 from dnashrink.view import View
 
