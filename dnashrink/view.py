@@ -31,6 +31,8 @@ class View(ThemedTk):
         Text widget to display all the results
     file_list : Combobox widget
         Combobox widget to enable file loading from GUI
+    style : Style
+        Style attribute used to change buttons style
     """
 
     def __init__(self,controller) -> None:
