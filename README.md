@@ -68,7 +68,6 @@ python3 main.py
 
 ## Using the dnashrink tool
 
-![tuto](photos/Demo_GFFTool.mp4)
 
 
 ## Authors :
