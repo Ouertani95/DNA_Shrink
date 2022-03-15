@@ -131,15 +131,13 @@ class Model():
 
         Returns:
         ----------
-        uncompressed : bool
+        bool :
             Verification result of compression status of self.current_sequence
         """
-        uncompressed = True
         for char in self.current_sequence:
             if char not in ["A","T","G","C","N","$"]:
-                uncompressed = False
-                break
-        return uncompressed
+                return False
+        return True
 
 
     def compress_sequence(self) -> str:

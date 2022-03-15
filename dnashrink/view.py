@@ -51,7 +51,6 @@ class View(ThemedTk):
         self.buttons = ["Open","Save","Compress","Decompress",
                         "Sequence to BWT","BWT to sequence",
                         "Next","End"]
-        self.labels = []
         self.text_display = None
         self.set_theme("breeze")
 
