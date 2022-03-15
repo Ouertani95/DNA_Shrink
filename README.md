@@ -18,10 +18,10 @@
 ![mvc_explanation](photos/mvc.png)
 
 ### Scripts
-![pkgs]()
+![pkgs](photos/scripts_used.png)
 
 ### UML
-![mvc]()
+![mvc](photos/dnashrink_MVC_UML)
 
 ## Installation
 
