@@ -330,8 +330,16 @@ class Model():
             self.decoding_dict[temp_items[0]]=temp_items[1]
     
     @staticmethod
-    def create_save_directory():
-        #verify if data directory / if not create it
+    def create_save_directory() -> None:
+        """
+        Class method used for creating the save directory on startup
+
+        Returns:
+        ----------
+        None
+        """
+        #verify if data directory exits / if not create it
         if not os.path.exists("./data"):
+            #Using bash mkdir equivalent to create data folder
             os.mkdir("./data")
 
