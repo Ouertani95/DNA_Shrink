@@ -13,13 +13,14 @@ setuptools.setup(
     author='Ouertani-Mohamed',
     author_email = 'ouertani2006@gmail.com',
     download_url = 'https://github.com/Ouertani95/PROJET_ALGO/archive/refs/heads/master.zip',
-    packages=setuptools.find_packages(include=['dnashrink', 'dnashrink.*']),
+    packages=setuptools.find_packages(include=['PROJET_ALGO','dnashrink', 'dnashrink.*']),
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
     install_requires=[
-                    "setuptools==45.2.0"
+                    "setuptools==45.2.0",
+                    "ttkthemes==3.2.2"
                       ],
     extras_require={
         'dev': [
@@ -31,9 +32,9 @@ setuptools.setup(
         ]
     },
     entry_points={
-        'program_scripts': [
-            'dnashrink=main:main'
+        'console_scripts': [
+            'dnashrink=dnashrink.main:main'
         ]
     },
-    python_requires='>=3.6',
+    python_requires='>=3.8',
 )
