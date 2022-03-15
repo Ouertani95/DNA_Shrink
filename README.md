@@ -40,9 +40,6 @@ The following graph represents the UML visualization of all the classes and thei
 
 ![mvc](photos/dnashrink_MVC_UML.png)
 
-## Features
-
-
 ## Installation
 
 - You can install the package from the source code hosted on github.
@@ -68,6 +65,10 @@ dnashrink
 cd ~/Desktop/OUERTANI/PROJET_ALGO
 python3 main.py
 ```
+
+## Using the dnashrink tool
+
+![tuto](photos/Demo_GFFTool.mp4)
 
 
 ## Authors :
