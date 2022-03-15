@@ -62,7 +62,7 @@ class Model():
         self.current_sequence = None
         self.current_function = None
         self.bwt_status = None
-
+        self.create_save_directory()
 
     def file_loader(self,input_file,file_name) -> str:
         """
@@ -231,9 +231,6 @@ class Model():
         file_name : str
             Name of the file that was saved in data directory
         """
-        #verify if data directory / if not create it
-        if not os.path.exists("./data"):
-            os.mkdir("./data")
         #Verify if sequence is compressed and save file accordingly
         if self.is_uncompressed():
             #Verify is sequence is bwt or not
@@ -331,3 +328,10 @@ class Model():
             temp_items = i.split(":")
             #Fill the dictionnary
             self.decoding_dict[temp_items[0]]=temp_items[1]
+    
+    @staticmethod
+    def create_save_directory():
+        #verify if data directory / if not create it
+        if not os.path.exists("./data"):
+            os.mkdir("./data")
+
