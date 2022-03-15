@@ -290,7 +290,6 @@ class BinaryTree():
                 self.head_node.set_zero(second_sibling)
                 self.head_node.set_one(first_sibling)
                 i += 1
-        print("Frequency tree :\n",self)
         return self
 
     def get_tree_leaves(self) -> dict:
