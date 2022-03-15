@@ -5,6 +5,7 @@
 
 __author__ = 'Mohamed Ouertani'
 
+# Local package imports
 from dnashrink.controller  import Controller
 
 def main() -> None:

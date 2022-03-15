@@ -9,6 +9,7 @@ manipulate data  using the Model component  and interact with the Views to rende
 
 __author__ = 'Mohamed Ouertani'
 
+# Local package imports
 from dnashrink.model import Model
 from dnashrink.view import View
 
@@ -50,10 +51,10 @@ class Controller():
         None
         """
         #Verify if no file is already loaded
-        if function != "Open" and not self.model.huffman_handler:
+        if function not in  ["Open","Load"] and not self.model.huffman_handler:
             self.view.show_warning()
         else:
-            #Assign function according to text attribute passed from view
+        #Assign function according to text attribute passed from view
             if function == "Open":
                 self.open()
             elif function == "Save":
@@ -70,6 +71,8 @@ class Controller():
                 self.step_by_step()
             elif function == "End":
                 self.jump_to_end()
+            elif function == "Load":
+                self.load_file()
 
 
     def compression(self) -> None:
@@ -81,16 +84,21 @@ class Controller():
         ----------
         None
         """
-        #Verify if sequence is uncompressed
-        if self.model.is_uncompressed():
-            #Call model compression method
-            compressed_seq,binary_sequence = self.model.compress_sequence()
-            #Call view update_text method to display results
-            self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
-                                 +f"Compressed sequence : {compressed_seq}")
+        #Verify if no function is running
+        if not self.model.current_function:
+            #Verify if sequence is uncompressed
+            if self.model.is_uncompressed():
+                #Call model compression method
+                compressed_seq,binary_sequence = self.model.compress_sequence()
+                #Call view update_text method to display results
+                self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
+                                    +f"Compressed sequence : {compressed_seq}")
+            else:
+                #Show warning message if sequence is already compressed
+                self.view.show_warning("Sequence is already compressed")
         else:
-            #Show warning message if sequence is already compressed
-            self.view.show_warning("Sequence is already compressed")
+            #Display warning
+            self.view.show_warning("A function is already running please finish it first")
 
 
     def decompression(self) -> None:
@@ -102,16 +110,21 @@ class Controller():
         ----------
         None
         """
-        #Verify if sequence is compressed
-        if not self.model.is_uncompressed():
-            #Call model decompression method
-            decompressed_seq,binary_sequence = self.model.decompress_sequence()
-            #Call view update_text method to display results
-            self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
-                                 +f"Decompressed sequence : {decompressed_seq}")
+        #Verify if no function is running
+        if not self.model.current_function:
+            #Verify if sequence is compressed
+            if not self.model.is_uncompressed():
+                #Call model decompression method
+                decompressed_seq,binary_sequence = self.model.decompress_sequence()
+                #Call view update_text method to display results
+                self.view.update_text(f"Binary sequence : {binary_sequence}\n\n"
+                                    +f"Decompressed sequence : {decompressed_seq}")
+            else:
+                #Show warning message if sequence is already decompressed
+                self.view.show_warning("Sequence is already decompressed")
         else:
-            #Show warning message if sequence is already decompressed
-            self.view.show_warning("Sequence is already decompressed")
+            #Display warning
+            self.view.show_warning("A function is already running please finish it first")
 
     def transform_bwt(self) -> None:
         """
@@ -189,6 +202,8 @@ class Controller():
                 current_sequence = self.model.get_current_sequence()
                 #Call view update_text method to display results
                 self.view.update_text(f"Current sequence : {current_sequence}")
+                #Reset the current_function attribute of the model
+                self.model.current_function = None
         else:
             #Display warning if no function is selected
             self.view.show_warning("No function is chosen yet")
@@ -216,6 +231,8 @@ class Controller():
                 current_sequence = self.model.get_current_sequence()
                 #Call view update_text method to display results
                 self.view.update_text(f"Current sequence : {current_sequence}")
+                #Reset the current_function attribute of the model
+                self.model.current_function = None
         else:
             #Display warning if no function is selected
             self.view.show_warning("No function is chosen yet")
@@ -229,15 +246,25 @@ class Controller():
         ----------
         None
         """
-        #Verify if a sequence is loaded to the program
-        if self.model.current_sequence:
-            #Save file using model's save_file method and recover file name
-            saved_files = self.model.save_file()
-            #Display name of the saved file using the view's show_warning method
-            self.view.show_warning(f"The Following files were saved :\n{saved_files}")
+        #Verify if no function is running
+        if not self.model.current_function:
+            #Verify if a sequence is loaded to the program
+            if self.model.current_sequence:
+                #Save file using model's save_file method and recover file name
+                saved_files = self.model.save_file()
+                #Display name of the saved file using the view's show_warning method
+                self.view.show_warning(f"The Following files were saved :\n{saved_files}")
+            else:
+                #Show warning if no sequence is loaded
+                self.view.show_warning()
+            #Get the new list of files
+            file_list = self.model.get_file_list()
+            #Update the list of files in combobox widget
+            self.view.update_file_list(file_list)
         else:
-            #Show warning if no sequence is loaded
-            self.view.show_warning()
+            #Display warning
+            self.view.show_warning("A function is already running please finish it first")
+        
 
     def open(self) -> None:
         """
@@ -256,6 +283,15 @@ class Controller():
             loaded_sequence = self.model.file_loader(file_path,file_name)
             #Display new loaded sequence using view's update_text method
             self.view.update_text(f"Current sequence : {loaded_sequence}")
+
+    def load_file(self) -> None:
+        #Get file_path and file_name from view
+        file_path,file_name = self.view.get_selected_file()
+        file_path = "./data/"+file_path
+        #Load the new sequence to the model Object
+        loaded_sequence = self.model.file_loader(file_path,file_name)
+        #Display the new loaded sequence in the text widget of the interface
+        self.view.update_text(f"Current sequence : {loaded_sequence}")
 
     def launch_view(self) -> None:
         """

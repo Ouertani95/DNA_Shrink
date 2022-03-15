@@ -8,6 +8,7 @@ interacting and manipulating the data directly under the commands of the Control
 
 __author__ = 'Mohamed Ouertani'
 
+# Standard library imports
 import os
 from typing import Generator
 from dnashrink.bwt import Bwt
@@ -340,4 +341,18 @@ class Model():
         if not os.path.exists("./data"):
             #Using bash mkdir equivalent to create data folder
             os.mkdir("./data")
+
+    @staticmethod
+    def get_file_list() -> list:
+        """
+        Class method used for recovering all files inside the data directory
+
+        Returns:
+        ----------
+        files_list : list[str]
+            A list of all the files inside data directory
+        """
+        #Get all files inside data directory
+        files_list = os.listdir("./data")
+        return files_list
 
