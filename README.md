@@ -21,7 +21,7 @@
 ![pkgs](photos/scripts_used.png)
 
 ### UML
-![mvc](photos/dnashrink_MVC_UML)
+![mvc](photos/dnashrink_MVC_UML.png)
 
 ## Installation
 
