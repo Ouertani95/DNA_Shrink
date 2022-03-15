@@ -14,11 +14,13 @@ from tkinter import DISABLED, END, RIGHT, Y, ttk, filedialog, messagebox
 from tkinter.font import NORMAL
 from pathlib import Path
 
+from ttkthemes import ThemedTk
 
-class View(tk.Tk):
+
+class View(ThemedTk):
 
     """View class representing the GUI interface.
-    The View class inherits all the methods and attributes of the tkinter Class.
+    The View class inherits all the methods and attributes of the ttkthemes Class.
 
     Attributes
     ----------
@@ -51,6 +53,7 @@ class View(tk.Tk):
                         "Next","End"]
         self.labels = []
         self.text_display = None
+        self.set_theme("breeze")
 
     def create_interface(self) -> None:
         """
@@ -62,16 +65,12 @@ class View(tk.Tk):
         """
         #Create main frame
         main_frame = ttk.Frame(self)
-        main_frame.pack()
-
-        # Set the initial theme
-        self.tk.call("source", "./Sun-Valley-ttk-theme-master/sun-valley.tcl")
-        self.tk.call("set_theme", "dark")
+        main_frame.pack(anchor="center")
 
         #Create an instance of Style Object and Configure the styles of the Buttons
         style = ttk.Style()
         style.configure('style.TButton',
-                        font=("Palatino Linotype", 12, "bold"), foreground="#3a86ff")
+                        font=("Palatino Linotype", 12, "bold"))
 
         #Create all the buttons
         column,row = 0,0
@@ -145,12 +144,11 @@ class View(tk.Tk):
             name of the chosen file extracted from the file path with no extension
         """
         #Open filedialog window for file selection
-        file_path = filedialog.askopenfilename(initialdir="./",
+        file_path = filedialog.askopenfilename(initialdir="./data",
                                                    title="Select a file",
                                                    filetypes=(("text files","*.txt"),
                                                               ("fasta file",".fasta"),
                                                               ("all files","*.*")))
-        print(file_path)
         #Check if a file is selected or not and show message
         if (len(file_path)) == 0 :
             name_file = ""
