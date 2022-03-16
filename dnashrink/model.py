@@ -11,6 +11,7 @@ __author__ = 'Mohamed Ouertani'
 # Standard library imports
 import os
 from typing import Generator
+# Local package imports
 from dnashrink.bwt import Bwt
 from dnashrink.huffman import Huffman
 
@@ -44,7 +45,7 @@ class Model():
 
     def __init__(self,controller) -> None:
         """
-        Class method for Creation of interface and all the widgets inside
+        Class constructor method for initializing all the attributes
 
         Parameters
         -----------
@@ -55,6 +56,7 @@ class Model():
         ----------
         None
         """
+        #Initializing all the attributes
         self.controller = controller
         self.bwt_handler = None
         self.huffman_handler = None
@@ -69,6 +71,13 @@ class Model():
         """
         Class method to load file into model object and update attributes
 
+        Parameters
+        -----------
+        input_file : str
+            Represents the file path from which to load the sequence
+        file_name : str
+            Represents the name of the file without an extension
+
         Returns:
         ----------
         current_sequence : str
@@ -81,6 +90,7 @@ class Model():
         #Conditional update of attributes
         if self.is_uncompressed():
             self.bwt_handler = Bwt(self.current_sequence)
+            #Checking if sequence is bwt
             if self.bwt_handler.input_is_bwt():
                 self.bwt_status = True
             else:
@@ -135,7 +145,9 @@ class Model():
         bool :
             Verification result of compression status of self.current_sequence
         """
+        #Go through all the characters in the sequence
         for char in self.current_sequence:
+            #Check if character in list
             if char not in ["A","T","G","C","N","$"]:
                 return False
         return True
@@ -154,7 +166,7 @@ class Model():
         """
         #Transform current_sequence to binary_sequence
         binary_sequence = self.huffman_handler.sequence_to_binary()
-        #Transfotm binary_sequence to Char sequence
+        #Transform binary_sequence to Char sequence
         huffman_sequence, decoding_dict = self.huffman_handler.binary_to_char()
         #Update model attributes
         self.current_sequence = huffman_sequence
@@ -189,7 +201,7 @@ class Model():
         Returns:
         ----------
         Generator :
-            When called returns the results of bwt transformation step by steps
+            When called returns the results of bwt transformation step by step
         """
         #Return bwt generation steps one by one
         yield from self.bwt_handler.bwt_generator()
@@ -208,7 +220,7 @@ class Model():
         Returns:
         ----------
         Generator :
-            When called returns the results of bwt reverse transformation step by steps
+            When called returns the results of bwt reverse transformation step by step
         """
         #Return reverse bwt transformation steps one by one
         yield from self.bwt_handler.bwt_decoder()
@@ -234,21 +246,32 @@ class Model():
         if self.is_uncompressed():
             #Verify is sequence is bwt or not
             if "$" in self.current_sequence:
+                #Create file_name
                 file_name = f"{self.current_file}_bwt.txt"
+                #Create new file
                 with open (f"./data/{file_name}","w") as bwt_output:
+                    #Write sequence into file
                     bwt_output.write(self.current_sequence)
             else:
+                #Create file_name
                 file_name = f"{self.current_file}_original.txt"
+                #Create new file
                 with open (f"./data/{file_name}","w") as original_output:
+                    #Write sequence into file
                     original_output.write(self.current_sequence)
         else:
             #Verify is sequence was bwt or not before compression
             if self.bwt_status:
+                #Create file_name
                 file_name = f"{self.current_file}_bwt_huffman.txt"
             else:
+                #Create file_name
                 file_name = f"{self.current_file}_huffman.txt"
+            #Transform the decoding_dictionnary to a string
             string_dict = self.dict_to_string()
+            #Create new file
             with open (f"./data/{file_name}","w") as huffman_output:
+                #Write sequence and dictionnary into file
                 huffman_output.writelines([self.current_sequence,"\n",string_dict])
         return file_name
 
@@ -296,8 +319,11 @@ class Model():
         string_dict : str
             Decoding_dict transformed into string format for lighter save
         """
+        #Initialize string_dict
         string_dict = ""
+        #Go through all items in decoding_dict attribute
         for i,j in self.decoding_dict.items():
+            #Add items in specific format
             string_dict += f"{i}:{j},"
         return string_dict
 
@@ -320,14 +346,15 @@ class Model():
         dict_elements = string_dict.split(",")
         #Remove the last , :
         dict_elements = dict_elements[:-1]
+        #Initializing the decoding_dict attribute
         self.decoding_dict = {}
         #Fill the dictionnary with the original values
-        for i in dict_elements:
+        for items in dict_elements:
             #Split key and value using : separator
-            temp_items = i.split(":")
+            split_items = items.split(":")
             #Fill the dictionnary
-            self.decoding_dict[temp_items[0]]=temp_items[1]
-    
+            self.decoding_dict[split_items[0]] = split_items[1]
+
     @staticmethod
     def create_save_directory() -> None:
         """
@@ -355,4 +382,3 @@ class Model():
         #Get all files inside data directory
         files_list = os.listdir("./data")
         return files_list
-

@@ -6,7 +6,8 @@
 __author__ = 'Mohamed Ouertani'
 
 # Local package imports
-from dnashrink.controller  import Controller
+from dnashrink.controller import Controller
+
 
 def main() -> None:
     """
@@ -20,6 +21,7 @@ def main() -> None:
     coordinator = Controller()
     #Launch the GUI
     coordinator.launch_view()
+
 
 #Execute main function
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ from typing import Generator
 class Bwt():
 
     """A class to represent the Burrows-Wheeler tranform algorithm
-    which help with the compression of the DNA sequences
+    which helps with the compression of the DNA sequences
 
     Attributes
     ----------
@@ -61,7 +61,9 @@ class Bwt():
         """
         #Adding $ to the end of the input_sequence
         dollar_sequence = self.input_sequence + "$"
+        #Calculating the length of the sequence
         sequence_length = len(dollar_sequence)
+        #Initializing the empty transformation list
         bwt_list = []
         #Transforming the dollar_sequence into bwt_sequence
         for _ in range(sequence_length):
@@ -71,6 +73,7 @@ class Bwt():
             yield "\n".join(bwt_list)
             #Rotating the dollar_sequence by one character
             dollar_sequence = dollar_sequence[-1] + dollar_sequence[:-1]
+        #Sorting the bwt_list alphabetically
         bwt_list.sort()
         #Returning the final sorted bwt_list
         yield "\n".join(bwt_list)
@@ -90,8 +93,9 @@ class Bwt():
         Generator :
             The Burrows-Wheeler reverse transformation steps
         """
-
+        #initializing the bwt_sequence attribute
         self.bwt_sequence = self.input_sequence
+        #Calculating the length of the bwt_sequence
         bwt_length = len(self.bwt_sequence)
         #Filling decoding list with empty string
         decoding_list = [""]*bwt_length

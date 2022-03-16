@@ -4,7 +4,7 @@
 """
 Controller module part of the MVC architechture  that acts as a middle-man
 between Model and View components to process all  the business logic and incoming requests,
-manipulate data  using the Model component  and interact with the Views to render the final output
+manipulate data  using the Model component  and interact with the View to render the final output
 """
 
 __author__ = 'Mohamed Ouertani'
@@ -34,7 +34,9 @@ class Controller():
         ----------
         None
         """
+        #Initializing the model attribute with a Model object
         self.model = Model(self)
+        #Initializing the view attribute with a View object
         self.view = View(self)
 
     def function_handler(self,function) -> None:
@@ -52,6 +54,7 @@ class Controller():
         """
         #Verify if no file is already loaded
         if function not in  ["Open","Load"] and not self.model.huffman_handler:
+            #Show warning message
             self.view.show_warning()
         else:
         #Assign function according to text attribute passed from view
@@ -97,7 +100,7 @@ class Controller():
                 #Show warning message if sequence is already compressed
                 self.view.show_warning("Sequence is already compressed")
         else:
-            #Display warning
+            #Display warning if a function is in use
             self.view.show_warning("A function is already running please finish it first")
 
 
@@ -123,7 +126,7 @@ class Controller():
                 #Show warning message if sequence is already decompressed
                 self.view.show_warning("Sequence is already decompressed")
         else:
-            #Display warning
+            #Display warning if a function is in use
             self.view.show_warning("A function is already running please finish it first")
 
     def transform_bwt(self) -> None:
@@ -264,12 +267,13 @@ class Controller():
         else:
             #Display warning
             self.view.show_warning("A function is already running please finish it first")
-        
+
 
     def open(self) -> None:
         """
         Class method to open a new sequence file using the view's open_file method
         then load the sequence to the program using the model's file_loader method
+        This method is linked to the open button from view
 
         Returns:
         ----------
@@ -285,6 +289,15 @@ class Controller():
             self.view.update_text(f"Current sequence : {loaded_sequence}")
 
     def load_file(self) -> None:
+        """
+        Class method to load a new sequence from pre-existing files created by the
+        dnashrink tool
+        This method is linked to the combobox selection event of a file from view
+
+        Returns:
+        ----------
+        None
+        """
         #Get file_path and file_name from view
         file_path,file_name = self.view.get_selected_file()
         file_path = "./data/"+file_path

@@ -20,8 +20,8 @@ from ttkthemes import ThemedTk
 
 class View(ThemedTk):
 
-    """View class representing the GUI interface.
-    The View class inherits all the methods and attributes of the ttkthemes Class.
+    """View class representing the GUI interface
+    The View class inherits all the methods and attributes of the ttkthemes Class
 
     Attributes
     ----------
@@ -53,7 +53,7 @@ class View(ThemedTk):
         self.text_display = None
         self.file_list = None
         self.style = None
-        
+
 
     def create_interface(self) -> None:
         """
@@ -69,7 +69,6 @@ class View(ThemedTk):
         #Create new style for buttons
         self.style=ttk.Style(main_frame)
         self.style.configure('TButton',font=("Palatino Linotype", 11, "bold"))
-
         #Create label for file loading combobox
         load_label = ttk.Label(main_frame,text="Load previous sequence : ",
                                font=("Palatino Linotype", 12, "bold"))
@@ -85,22 +84,22 @@ class View(ThemedTk):
         self.update_file_list(os.listdir("./data"))
 
         #Create a list of all the frame names
-        Frame_list = ["File control",
+        frame_list = ["File control",
                       "Huffman compression/decompression",
                       "Burrows-Wheeler Transformation",
                       "Steps"]
         #Create the Lableframe and buttons for file controlling
         file_buttons = ["Open","Save"]
-        self.function_framer(main_frame,Frame_list[0],file_buttons,0,1)
-        #Create the Labelframe and buttons for Huffman compression/decompression 
+        self.function_framer(main_frame,frame_list[0],file_buttons,0,1)
+        #Create the Labelframe and buttons for Huffman compression/decompression
         huffman_buttons = ["Compress","Decompress"]
-        self.function_framer(main_frame,Frame_list[1],huffman_buttons,0,2)
+        self.function_framer(main_frame,frame_list[1],huffman_buttons,0,2)
         #Create the Labelframe and buttons for BWT transformation
         bwt_buttons = ["Sequence to BWT","BWT to sequence"]
-        self.function_framer(main_frame,Frame_list[2],bwt_buttons,0,3)
+        self.function_framer(main_frame,frame_list[2],bwt_buttons,0,3)
         #Create the Labelframe and buttons for the steps
         step_buttons = ["Next","End"]
-        self.function_framer(main_frame,Frame_list[3],step_buttons,0,5)
+        self.function_framer(main_frame,frame_list[3],step_buttons,0,5)
 
         #Create frame for text widget
         text_frame = ttk.Frame(main_frame)
@@ -211,8 +210,8 @@ class View(ThemedTk):
 
     def file_loader(self,event) -> None:
         """
-        Class method to initiaite file loading from combobox.
-        This method actually calls the controller method function_handler.
+        Class method to initiate file loading from combobox
+        This method actually calls the controller method function_handler
 
         Parameters
         -----------
@@ -243,7 +242,7 @@ class View(ThemedTk):
         #Extract file name from path
         file_name = Path(file_path).stem
         return file_path,file_name
-    
+
     def update_file_list(self,file_list) -> None:
         """
         Class method to update the files in the combobox widget
@@ -254,7 +253,7 @@ class View(ThemedTk):
         """
         #Update the values attribute of the combobox widget
         self.file_list["values"] = file_list
-    
+
     def function_framer(self,main_frame,frame_name,buttons_list,column,row)-> None:
         """
         Class method to create Labelframes and buttons for organised layout
@@ -269,7 +268,7 @@ class View(ThemedTk):
             Contains the names of the Buttons to be created
         column : int
             Number of the initial column for creating the Frame and Buttons
-        row : 
+        row :
             Number of the initial row for creating the Frame and Buttons
 
         Returns

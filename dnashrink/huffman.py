@@ -51,8 +51,11 @@ class Huffman():
         ----------
         None
         """
+        #Initializing the input_sequence attribute
         self.input_sequence = input_sequence
+        #Verifying if input_sequence sequence is uncompressed
         if self.sequence_checker():
+        #Initializing all the attributes
             self.original_sequence = input_sequence
             self.frequency_list = self.car_frequency()
             self.binary_tree = BinaryTree().tree_builder(self.frequency_list)
@@ -72,15 +75,15 @@ class Huffman():
 
         Returns:
         ----------
-        uncompressed : bool
+        bool :
             Boolean variable result for compression verification
         """
-        uncompressed = True
+        #Going through the sequence characters
         for char in self.input_sequence:
+            #Verifying if character is part of the list
             if char not in ["A","T","G","C","N","$"]:
-                uncompressed = False
-                break
-        return uncompressed
+                return False
+        return True
 
     def car_frequency(self) -> list:
         """
@@ -108,6 +111,7 @@ class Huffman():
         binary_sequence : str
             Final binary sequence after transformation
         """
+        #Initializing binary_sequence attribute
         self.binary_sequence = ""
         #Fill binary_sequence with binary code corresponding to each nucleotide from coding_dict
         for nuc in self.original_sequence:
@@ -127,23 +131,31 @@ class Huffman():
             The new decoding dictionnary with the last Char number of bits needed
             for decompressing the sequence
         """
+        #Initializing the huffman_sequence attribute
         self.huffman_sequence = ""
+        #Calculating the length of the binary_sequence attribute
         len_binary = len(self.binary_sequence)
         i=0
         #Transforming the binary sequence to Char sequence
         while i < len_binary:
             if i+8 <= len_binary:
+                #Getting the 8 bit subsequence
                 partial_sequence = self.binary_sequence[i:i+8]
+                #Transforming subsequence to char and adding it to huffman_sequence
                 self.huffman_sequence += chr(int(partial_sequence,2))
                 i = i+8
             else: #Condition for the last Char transformation
+                #Getting the last bits subsequence
                 partial_sequence = self.binary_sequence[i:len_binary]
+                #Transforming subsequence to char and adding it to huffman_sequence
                 self.huffman_sequence += chr(int(partial_sequence,2))
                 break
 
-        #Calculating the number of bits of the last Char
+        #calculating the length of the huffman_sequence
         len_compressed = len(self.huffman_sequence)
+        #Getting the last character from the huffman_sequence
         last_char = self.huffman_sequence[len_compressed-1]
+        #Calculating the number of bits of last character
         last_bits = len_binary%8
 
         #Adding the last character and it's number of bits to decoding_dict
@@ -163,8 +175,9 @@ class Huffman():
         binary_sequence : str
             Intermediate binary sequence obtained from decompressing the Huffman_sequence
         """
-        #Transforming the Char sequence to binary sequence
+        #Initializing binary_sequence attribute
         self.binary_sequence = ""
+        #Going through each character of the huffman_sequence
         for index,char in enumerate(self.huffman_sequence):
             if index != len(self.huffman_sequence)-1:
                 #Transform Char to binary int and fill first characters with 0 to obtain 8 bit code
@@ -172,6 +185,7 @@ class Huffman():
             else:
                 #Replace the last Char by binary equivalent with number of bits from decoding_dict
                 decoding_keys = list(self.decoding_dict.values())
+                #Transform Char to binary int and fill first characters with 0 for last bits code
                 binary_char = str(format(ord(char),'b')).zfill(int(decoding_keys[-1]))
             #Add partial binary seq to binary_sequence
             self.binary_sequence += binary_char
@@ -186,17 +200,23 @@ class Huffman():
         original sequence : str
             The final decompressed sequence obtained using the Huffman algorithm
         """
+        #Initialize original sequence attribute
         self.original_sequence = ""
+        #Calculate length og binary_sequence attribute
         sequence_length = len(self.binary_sequence)
         i = 0
         length_subsequence = 1
         #Transforming the binary sequence to original DNA sequence
         while i + length_subsequence <= sequence_length:
+            #Getting the subbinary_sequence from binary_sequence
             subbinary_sequence = self.binary_sequence[i:i+length_subsequence]
+            #searching for corresonding key to subbinary sequence in decoding dictionnary
             if subbinary_sequence in self.decoding_dict.keys():
-                #If subsequence is in dictionnary add the corresponding value to original_sequence
+                #If subsequence in dictionnary add the corresponding value to original_sequence
                 self.original_sequence += self.decoding_dict[subbinary_sequence]
+                #Moving index forward
                 i = i + length_subsequence
+                #Initialize length of subsequence to 1
                 length_subsequence = 1
             else: #If subsequence is not in the dictionnary increase it's length
                 length_subsequence += 1

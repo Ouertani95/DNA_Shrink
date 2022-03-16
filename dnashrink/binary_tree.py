@@ -124,13 +124,14 @@ class Node:
 
     def print_node(self) -> None:
         """
-        Class recursive method that prints the node and all it's subnodes
+        Class recursive method that returns the node and all it's subnodes
+        This method is a generator that could be called upon to display the BinaryTree
 
         Returns:
         ----------
         None
         """
-        print(self)
+        yield self
         if self.zero:
             self.zero.print_node()
         if self.one:
@@ -151,8 +152,8 @@ class Node:
     def get_leaves(self,binary_tree,car_code="") -> dict:
         """
         Class recursive method that gets all leaves of the Node
-        This method also fills the coding and decoding leaves while searching
-        for the leaves of the binary tree
+        This method also fills the coding and decoding dictionnaries while searching
+        for the leaves of the BinaryTree
 
         Parameters
         -----------
@@ -234,7 +235,7 @@ class BinaryTree():
 
     def tree_builder(self,list_frequencies):
         """
-        Class method that builds the tree nodes according to frequency list
+        Class method that builds the tree nodes according to a frequency list
 
         Parameters
         -----------
@@ -248,6 +249,7 @@ class BinaryTree():
             Represents the final built BinaryTree Object
         """
         i = 0
+        #Check if index of List is not out of range
         while i < len(list_frequencies):
             #Check if the tree is empty
             if self.head_node is None :
@@ -316,7 +318,7 @@ class BinaryTree():
         Returns:
         ----------
         str :
-            Represents the print_node method of the head Node which prints the entire
+            Represents the print_node method of the head Node which returns the entire
             Nodes and sub Nodes of the BinaryTree Object
         """
         return str(self.head_node.print_node())
