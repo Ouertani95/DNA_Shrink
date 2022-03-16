@@ -73,6 +73,8 @@ python3 main.py
 
 ## Using the dnashrink tool
 
+The tutorials below are available in the tutorials directory of this project if you need to watch them locally.
+
 - Using a normal / decompressed sequence as input :
 
 https://user-images.githubusercontent.com/95162533/158532608-5343de63-76a9-4c28-a879-1999f855b855.mp4
