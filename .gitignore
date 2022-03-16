@@ -5,3 +5,6 @@ testing_files/
 
 #pdf files
 *.pdf
+
+#my uninstall file
+my_ubuntu_uninstall.sh
