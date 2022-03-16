@@ -68,8 +68,15 @@ python3 main.py
 
 ## Using the dnashrink tool
 
+- Using a normal / decompressed sequence as input :
+https://user-images.githubusercontent.com/95162533/158532608-5343de63-76a9-4c28-a879-1999f855b855.mp4
 
+-Using a compressed Huffman sequence as input :
+https://user-images.githubusercontent.com/95162533/158532650-e5603798-04e8-4a56-bc6c-59bd63aa35a6.mp4
 
 ## Authors :
 
 **Mohamed Ouertani**
+
+
+
